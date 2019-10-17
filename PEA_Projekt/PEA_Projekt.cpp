@@ -7,18 +7,56 @@
 
 int main()
 {
-	std::cout << "Wpisz manualnie: ";
-	AdjacencyMatrix* am2 = new AdjacencyMatrix();
-	am2->LoadDataFromStream(std::cin, &std::cout);
+	int action = 0;
+	while (true) {
+		std::cout << "============" << std::endl;
+		std::cout << "PROBLEM KOMIWOJAZERA" << std::endl;
+		std::cout << "============" << std::endl << std::endl;
+		 
+		std::cout << "1. Zaladuj z pliku" << std::endl;
+		std::cout << "2. Wygeneruj losowo" << std::endl;
+		std::cout << "3. Wprowadz recznie" << std::endl;
 
-	am2->Display(std::cout);
+		std::cin >> action;
 
-	std::string fileName;	
-	std::cout << "Podaj nazwe pliku: ";
-	std::cin >> fileName;
+		switch (action) {
+		case 1:
+		{
+			std::string fileName;
+			std::cout << "Podaj nazwe pliku: ";
+			std::cin >> fileName;
 
-	AdjacencyMatrix* am = new AdjacencyMatrix(fileName);
-	am->Display(std::cout);
+			AdjacencyMatrix* am = new AdjacencyMatrix(fileName);
+			am->Display(std::cout);
+		}
+		break;
+		case 2:
+		{
+			AdjacencyMatrix* am = new AdjacencyMatrix();
+			std::cout << "Podaj wielkosc:  ";
+			int size = 0;
+			std::cin >> size;
+			std::cout << "Podaj min:  ";
+			int min = 0;
+			std::cin >> min;
+			std::cout << "Podaj max:  ";
+			int max = 0;
+			std::cin >> max;
+			am->BuildRandomly(size, min, max);
+			am->Display(std::cout);
+		}
+		break;
+		case 3:
+		{
+			std::cout << "Wpisz manualnie: ";
+			AdjacencyMatrix* am2 = new AdjacencyMatrix();
+			am2->LoadDataFromStream(std::cin, &std::cout);
+
+			am2->Display(std::cout);
+		}
+		break;
+		}
+	}
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

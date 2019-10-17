@@ -1,6 +1,8 @@
 #include "AdjacencyMatrix.h"
 #include <fstream>
 #include <sstream>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 using namespace std;
 
@@ -86,6 +88,28 @@ void AdjacencyMatrix::RebuildMatrix()
 	this->matrix = new Edge * [this->size];
 	for (int a = 0; a < this->size; a++) {
 		this->matrix[a] = new Edge[this->size];
+	}
+}
+
+void AdjacencyMatrix::BuildRandomly(int size, int min, int max)
+{
+	/* initialize random seed: */
+	srand(time(NULL));
+	this->size = size;
+	RebuildMatrix();
+
+	for (int col = 0; col < size; col++) {
+		for (int row = 0; row < size; row++) {
+			/* generate number between 1 and 10: */
+			int number = 0;
+			if (col != row) {
+				number = rand() % max + min;
+			}
+			else {
+				number = -1;
+			}
+			this->matrix[col][row] = Edge(col, row, number);
+		}
 	}
 }
 
