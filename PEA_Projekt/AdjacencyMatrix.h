@@ -9,10 +9,12 @@ private:
 public:
 	std::string name;
 	int size;
+	AdjacencyMatrix();
 	AdjacencyMatrix(const std::string& fileName);
 
+	void LoadDataFromStream(std::istream& stream, std::ostream* output);
 	void LoadDataFromFile(const std::string& fileName);
 	void RebuildMatrix();
-	void Display();
+	void Display(std::ostream& output);
 };
 

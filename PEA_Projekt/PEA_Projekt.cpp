@@ -7,12 +7,18 @@
 
 int main()
 {
-	std::string fileName;
-		
+	std::cout << "Wpisz manualnie: ";
+	AdjacencyMatrix* am2 = new AdjacencyMatrix();
+	am2->LoadDataFromStream(std::cin, &std::cout);
+
+	am2->Display(std::cout);
+
+	std::string fileName;	
+	std::cout << "Podaj nazwe pliku: ";
 	std::cin >> fileName;
 
 	AdjacencyMatrix* am = new AdjacencyMatrix(fileName);
-	am->Display();
+	am->Display(std::cout);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
