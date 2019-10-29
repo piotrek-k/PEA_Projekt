@@ -1,6 +1,7 @@
 #pragma once
 #include "Edge.h"
 #include <vector>
+#include "AdjacencyMatrix.h"
 
 class Path
 {
@@ -13,5 +14,8 @@ public:
 	static int CalculateCost(std::vector<Edge> path);
 
 	void InsertEdge(Edge edge);
+
+	void GenerateRandom(AdjacencyMatrix* matrix, int size);
+	void Display(std::ostream& stream);
 };
 

@@ -17,5 +17,8 @@ public:
 	void RebuildMatrix();
 	void BuildRandomly(int size, int min, int max);
 	void Display(std::ostream& output);
+
+	int GetWeightOfEdge(int from, int to);
+	int GetSize();
 };
 

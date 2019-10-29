@@ -125,3 +125,13 @@ void AdjacencyMatrix::Display(std::ostream& output)
 		output << std::endl;
 	}
 }
+
+int AdjacencyMatrix::GetWeightOfEdge(int from, int to)
+{
+	return matrix[from][to].weight;
+}
+
+int AdjacencyMatrix::GetSize()
+{
+	return this->size;
+}

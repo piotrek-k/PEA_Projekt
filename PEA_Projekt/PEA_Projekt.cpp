@@ -4,18 +4,22 @@
 #include <iostream>
 #include <string>
 #include "AdjacencyMatrix.h"
+#include "Path.h"
 
 int main()
 {
 	int action = 0;
+	AdjacencyMatrix* lastAM = new AdjacencyMatrix();
 	while (true) {
 		std::cout << "============" << std::endl;
 		std::cout << "PROBLEM KOMIWOJAZERA" << std::endl;
 		std::cout << "============" << std::endl << std::endl;
-		 
-		std::cout << "1. Zaladuj z pliku" << std::endl;
-		std::cout << "2. Wygeneruj losowo" << std::endl;
-		std::cout << "3. Wprowadz recznie" << std::endl;
+
+		std::cout << "1. Macierz: zaladuj z pliku" << std::endl;
+		std::cout << "2. Macierz: generowanie losowe" << std::endl;
+		std::cout << "3. Macierz: wprowadzanie reczne" << std::endl;
+		std::cout << "4. Funkcja celu: permutacja losowa" << std::endl;
+		std::cout << "5. Funkcja celu: wprowadzanie reczne" << std::endl;
 
 		std::cin >> action;
 
@@ -26,13 +30,13 @@ int main()
 			std::cout << "Podaj nazwe pliku: ";
 			std::cin >> fileName;
 
-			AdjacencyMatrix* am = new AdjacencyMatrix(fileName);
-			am->Display(std::cout);
+			lastAM = new AdjacencyMatrix(fileName);
+			lastAM->Display(std::cout);
 		}
 		break;
 		case 2:
 		{
-			AdjacencyMatrix* am = new AdjacencyMatrix();
+			lastAM = new AdjacencyMatrix();
 			std::cout << "Podaj wielkosc:  ";
 			int size = 0;
 			std::cin >> size;
@@ -42,19 +46,49 @@ int main()
 			std::cout << "Podaj max:  ";
 			int max = 0;
 			std::cin >> max;
-			am->BuildRandomly(size, min, max);
-			am->Display(std::cout);
+			lastAM->BuildRandomly(size, min, max);
+			lastAM->Display(std::cout);
 		}
 		break;
 		case 3:
 		{
-			std::cout << "Wpisz manualnie: ";
-			AdjacencyMatrix* am2 = new AdjacencyMatrix();
-			am2->LoadDataFromStream(std::cin, &std::cout);
+			std::cout << "Wpisz recznie: ";
+			lastAM = new AdjacencyMatrix();
+			lastAM->LoadDataFromStream(std::cin, &std::cout);
 
-			am2->Display(std::cout);
+			lastAM->Display(std::cout);
 		}
 		break;
+		case 4:
+		{
+			Path* path = new Path();
+			path->GenerateRandom(lastAM, lastAM->GetSize());
+			path->Display(std::cout);
+		}
+		break;
+		case 5:
+		{
+			Path* path = new Path();
+			std::cout << "WprowadŸ dane (-1 konczy wprowadzanie):" << std::endl;
+			int weight = 0;
+			int from = 0;
+			int to = 0;
+			do {
+				std::cout << "Waga: " << std::endl;
+				std::cin >> weight;
+
+				if (weight == -1) {
+					break;
+				}
+
+				std::cout << "Od: " << std::endl;
+				std::cin >> from;
+				std::cout << "Do: " << std::endl;
+				std::cin >> to;
+				path->InsertEdge(Edge(from, to, weight));
+			} while (weight != -1);
+			path->Display(std::cout);
+		}
 		}
 	}
 }
