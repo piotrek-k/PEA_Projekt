@@ -6,9 +6,10 @@ class AdjacencyMatrix
 {
 private:
 	Edge** matrix = nullptr;
+	int size;
 public:
 	std::string name;
-	int size;
+	
 	AdjacencyMatrix();
 	AdjacencyMatrix(const std::string& fileName);
 

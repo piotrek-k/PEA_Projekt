@@ -22,9 +22,77 @@ int Path::CalculateCost(std::vector<Edge> path)
 	return totalCost;
 }
 
+bool Path::ContainsValue(int from, int to)
+{
+	for (int a = 0; a < path.size(); a++) {
+		if (path[a].from == from && path[a].to == to) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Path::ValueCanBeConnectedToEnd(int value)
+{
+	for (int a = 0; a < path.size(); a++) {
+		if (path[a].to == value) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void Path::InsertStartingPoint(int pointIndex)
+{
+	if (path.size() > 0) {
+		throw "Cannot insert starting point to existing path";
+	}
+	startingPoint = pointIndex;
+}
+
 void Path::InsertEdge(Edge edge)
 {
+	if (path.size() == 0 && this->startingPoint == -1) {
+		this->startingPoint = edge.from;
+	}
 	this->path.push_back(edge);
+	this->lastPoint = edge.to;
+}
+
+void Path::RemoveLastEdge()
+{
+	if (path.size() == 0) {
+		return;
+	}
+
+	path.pop_back();
+	if (path.size() > 0) {
+		this->lastPoint = path[path.size() - 1].to;
+	}
+	else {
+		this->lastPoint = this->startingPoint;
+	}
+}
+
+void Path::InsertNodeAtTheEnd(AdjacencyMatrix* matrix, int value)
+{
+	Edge e = Edge(lastPoint, value, matrix->GetWeightOfEdge(lastPoint,value));
+	InsertEdge(e);
+}
+
+int Path::GetNumberOfNodes()
+{
+	if (this->path.size() == 0){
+		if (this->startingPoint != -1) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+	else {
+		return this->path.size()-1;
+	}
 }
 
 void Path::GenerateRandom(AdjacencyMatrix* am, int size)

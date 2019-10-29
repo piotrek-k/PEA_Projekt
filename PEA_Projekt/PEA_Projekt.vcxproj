@@ -155,11 +155,13 @@
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="PEA_Projekt.cpp" />
+    <ClCompile Include="TS_ProblemSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdjacencyMatrix.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Path.h" />
+    <ClInclude Include="TS_ProblemSolver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
