@@ -5,6 +5,7 @@
 #include <string>
 #include "AdjacencyMatrix.h"
 #include "Path.h"
+#include "TS_ProblemSolver.h"
 
 int main()
 {
@@ -20,6 +21,7 @@ int main()
 		std::cout << "3. Macierz: wprowadzanie reczne" << std::endl;
 		std::cout << "4. Funkcja celu: permutacja losowa" << std::endl;
 		std::cout << "5. Funkcja celu: wprowadzanie reczne" << std::endl;
+		std::cout << "6. Brute Force" << std::endl;
 
 		std::cin >> action;
 
@@ -89,6 +91,18 @@ int main()
 			} while (weight != -1);
 			path->Display(std::cout);
 		}
+		break;
+		case 6:
+		{
+			if (lastAM != NULL) {
+				Path* path = TS_ProblemSolver::UseBruteForce(lastAM, 0, lastAM->GetSize() - 1);
+				path->Display(std::cout);
+			}
+			else {
+				std::cout << "lastAM null" << std::endl;
+			}
+		}
+		break;
 		}
 	}
 }

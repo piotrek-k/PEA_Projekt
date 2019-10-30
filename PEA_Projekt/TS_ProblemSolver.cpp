@@ -3,7 +3,7 @@
 Path* TS_ProblemSolver::UseBruteForce(AdjacencyMatrix* matrix, int startingPoint, int endPoint)
 {
 	Path* tempPath = new Path();
-	tempPath->InsertStartingPoint(startingPoint);
+	tempPath->SetStartingPoint(startingPoint);
 
 	int bestValue = -1;
 
@@ -20,13 +20,12 @@ void TS_ProblemSolver::BruteForce_SearchTree(AdjacencyMatrix* matrix, Path* curr
 		currentlyCheckedPath->InsertNodeAtTheEnd(matrix, endPoint);
 		int result = currentlyCheckedPath->CalculateCost();
 		
-		if (*bestValue == -1) {
+		if (*bestValue == -1 || result < *bestValue) {
 			*bestValue = result;
-		}
-		else if (result < *bestValue) {
-			*bestValue = result;
+			bestPath->ReplaceWithOtherInstance(*currentlyCheckedPath);
 		}
 		currentlyCheckedPath->RemoveLastEdge();
+		return;
 	}
 
 	for (int a = 0; a < matrix->GetSize(); a++) {

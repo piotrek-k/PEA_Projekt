@@ -4,6 +4,14 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 
+Path::Path()
+{
+}
+
+Path::~Path()
+{
+}
+
 int Path::CalculateCost()
 {
 	int totalCost = 0;
@@ -42,12 +50,13 @@ bool Path::ValueCanBeConnectedToEnd(int value)
 	return true;
 }
 
-void Path::InsertStartingPoint(int pointIndex)
+void Path::SetStartingPoint(int pointIndex)
 {
 	if (path.size() > 0) {
 		throw "Cannot insert starting point to existing path";
 	}
 	startingPoint = pointIndex;
+	lastPoint = pointIndex;
 }
 
 void Path::InsertEdge(Edge edge)
@@ -76,13 +85,19 @@ void Path::RemoveLastEdge()
 
 void Path::InsertNodeAtTheEnd(AdjacencyMatrix* matrix, int value)
 {
-	Edge e = Edge(lastPoint, value, matrix->GetWeightOfEdge(lastPoint,value));
+	if (startingPoint == -1) {
+		startingPoint = value;
+		lastPoint = value;
+		return;
+	}
+
+	Edge e = Edge(lastPoint, value, matrix->GetWeightOfEdge(lastPoint, value));
 	InsertEdge(e);
 }
 
 int Path::GetNumberOfNodes()
 {
-	if (this->path.size() == 0){
+	if (this->path.size() == 0) {
 		if (this->startingPoint != -1) {
 			return 1;
 		}
@@ -91,8 +106,15 @@ int Path::GetNumberOfNodes()
 		}
 	}
 	else {
-		return this->path.size()-1;
+		return this->path.size() + 1;
 	}
+}
+
+void Path::ReplaceWithOtherInstance(const Path& otherInstance)
+{
+	this->startingPoint = otherInstance.startingPoint;
+	this->lastPoint = otherInstance.lastPoint;
+	this->path = otherInstance.path;
 }
 
 void Path::GenerateRandom(AdjacencyMatrix* am, int size)
