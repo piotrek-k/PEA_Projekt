@@ -22,6 +22,7 @@ int main()
 		std::cout << "4. Funkcja celu: permutacja losowa" << std::endl;
 		std::cout << "5. Funkcja celu: wprowadzanie reczne" << std::endl;
 		std::cout << "6. Brute Force" << std::endl;
+		std::cout << "7. Kombinacje" << std::endl;
 
 		std::cin >> action;
 
@@ -95,7 +96,7 @@ int main()
 		case 6:
 		{
 			if (lastAM != NULL) {
-				Path* path = TS_ProblemSolver::UseBruteForce(lastAM, 0, lastAM->GetSize() - 1);
+				Path* path = TS_ProblemSolver::UseBruteForce(lastAM, 0, 0);
 				path->Display(std::cout);
 			}
 			else {
