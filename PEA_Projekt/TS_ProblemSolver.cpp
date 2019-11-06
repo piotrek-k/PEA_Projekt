@@ -19,7 +19,7 @@ Path* TS_ProblemSolver::UseBruteForce(AdjacencyMatrix* matrix, int startingPoint
 
 void TS_ProblemSolver::BruteForce_SearchTree(AdjacencyMatrix* matrix, Path* currentlyCheckedPath, int* bestValue, Path* bestPath, int startPoint, int endPoint)
 {
-	if (currentlyCheckedPath->GetNumberOfNodes() == matrix->GetSize() - 1) {
+	if (currentlyCheckedPath->GetNumberOfNodes() == matrix->GetSize()) {
 		currentlyCheckedPath->InsertNodeAtTheEnd(matrix, endPoint);
 		int result = currentlyCheckedPath->CalculateCost();
 
@@ -171,15 +171,16 @@ Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int start
 			calculatedValues[1 << pointIndex]->SetCost(pointIndex, matrix->GetWeightOfEdge(startingPoint, pointIndex));
 			calculatedValues[1 << pointIndex]->SetStepToMinimum(pointIndex);
 		}
-
-		std::cout << "combination [ " << pointIndex << "] " << calculatedValues[1 << pointIndex]->GetValue(pointIndex) << std::endl;
+		if (verbose) {
+			std::cout << "combination [ " << pointIndex << "] " << calculatedValues[1 << pointIndex]->GetValue(pointIndex) << std::endl;
+		}
 	}
 
 	/**
 	  * Wype³nienie tablicy calculatedValues dla wszystkich pozosta³ych wielkoœci podzbiorów
 	  **/
 	for (int setSize = 2; setSize < matrix->GetSize(); setSize++) {
-		TS_ProblemSolver::DynamicProgramming_GenerateCombinations(matrix, setSize, calculatedValues, 0, 0, true, std::vector<int>(), 0);
+		TS_ProblemSolver::DynamicProgramming_GenerateCombinations(matrix, setSize, calculatedValues, 0, 0, verbose, std::vector<int>(), 0);
 	}
 
 	/**
@@ -206,7 +207,9 @@ Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int start
 		~(1 << startingPoint);
 	calculatedValues[storageIndexWithoutStartPoint]->SetCost(endPoint, minValue);
 	calculatedValues[storageIndexWithoutStartPoint]->SetStepToMinimum(nextStepOfMin);
-	std::cout << "minValue:" << minValue << " stepToMin: " << nextStepOfMin << std::endl;
+	if (verbose) {
+		std::cout << "minValue:" << minValue << " stepToMin: " << nextStepOfMin << std::endl;
+	}
 
 	/**
 	  * Generowanie œcie¿ki

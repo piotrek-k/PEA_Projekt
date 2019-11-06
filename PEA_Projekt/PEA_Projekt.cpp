@@ -107,7 +107,7 @@ int main()
 		case 7:
 		{
 			if (lastAM != NULL) {
-				Path* path = TS_ProblemSolver::UseDynamicProgramming(lastAM, 0, 0);
+				Path* path = TS_ProblemSolver::UseDynamicProgramming(lastAM, 0, 0, false);
 				path->Display(std::cout);
 			}
 			else {

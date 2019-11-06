@@ -45,11 +45,13 @@ void AdjacencyMatrix::LoadDataFromStream(std::istream& myfile, std::ostream* out
 			break;
 		}
 
+		//std::cout << "row " << row << std::endl;
+
 		int col = 0;
 
 		stringstream stream(line);
-		string extractedPart;
-		int extractedWeight;
+		string extractedPart = "";
+		int extractedWeight = 0;
 		while (!stream.eof()) {
 			try {
 				stream >> extractedWeight;
@@ -59,7 +61,9 @@ void AdjacencyMatrix::LoadDataFromStream(std::istream& myfile, std::ostream* out
 				col++;
 			}
 			catch (const exception & e) {
-				*output << "Konwersja string -> int nie powiodla sie" << endl;
+				if (output != nullptr) {
+					*output << "Konwersja string -> int nie powiodla sie" << endl;
+				}
 			}
 		}
 
