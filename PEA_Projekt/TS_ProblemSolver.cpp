@@ -87,7 +87,7 @@ void TS_ProblemSolver::DynamicProgramming_CheckCombination(AdjacencyMatrix* matr
 	// Wnêtrze funkcji przetwarza pojedynczy podzbiór S (combination) wraz z wszystkimi zakoñczeniami
 
 	//int minimumOfAllEndings = INT_MAX;
-	
+
 	if (verbose) {
 		pretty_print(combination);
 	}
@@ -115,7 +115,7 @@ void TS_ProblemSolver::DynamicProgramming_CheckCombination(AdjacencyMatrix* matr
 
 		int foundMinValue = INT_MAX;
 		int stepToMinimumCost = -1;
-		
+
 		for (int b = 0; b < combination.size(); b++) {
 			int indexToCheck = combination[b];
 			if (indexToCheck == destPointIndexInMatrix) {
@@ -132,22 +132,27 @@ void TS_ProblemSolver::DynamicProgramming_CheckCombination(AdjacencyMatrix* matr
 		}
 
 		calculatedValues[storageIndexOfCombination]->SetCost(destPointIndexInMatrix, foundMinValue);
-		calculatedValues[storageIndexWithoutDestPoint]->SetStepToMinimum(stepToMinimumCost);
+		/*if (calculatedValues[storageIndexWithoutDestPoint]->GetStepToMinimum() != -1) {
+			pretty_print(combination);
+			std::cout << "Problem" << std::endl;
+		}*/
+		/*int currentValueOfStepToMinimum = calculatedValues[storageIndexWithoutDestPoint]->GetValueOfStepToMinimum();
+		if (currentValueOfStepToMinimum > foundMinValue) {
+			calculatedValues[storageIndexWithoutDestPoint]->SetStepToMinimum(stepToMinimumCost);
+			calculatedValues[storageIndexWithoutDestPoint]->SetValueOfStepToMinimum(foundMinValue);
+		}*/
+		calculatedValues[storageIndexWithoutDestPoint]->TrySetMinimumStep(destPointIndexInMatrix, stepToMinimumCost, foundMinValue);
 		if (verbose) {
 			std::cout << "* Saving " << foundMinValue << " into " << print_binary(storageIndexOfCombination) << ":" << destPointIndexInMatrix << std::endl;
 			std::cout << "* StepToMinimum dla " << print_binary(storageIndexWithoutDestPoint) << ": " << stepToMinimumCost << std::endl;
 		}
-
-		/*if (foundMinValue < minimumOfAllEndings) {
-			minimumOfAllEndings = foundMinValue;
-		}*/
 	}
 }
 
 Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int startingPoint, int endPoint, bool verbose)
 {
 	const int possibleVerticesCombinations = (int)pow(2, matrix->GetSize());
-	DP_CombinationInfo** calculatedValues = new DP_CombinationInfo * [possibleVerticesCombinations+1];
+	DP_CombinationInfo** calculatedValues = new DP_CombinationInfo * [possibleVerticesCombinations + 1];
 
 	/**
 	  * Utworzenie tablicy
@@ -167,7 +172,8 @@ Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int start
 
 		if (pointIndex != startingPoint) {
 			calculatedValues[1 << pointIndex]->SetCost(pointIndex, matrix->GetWeightOfEdge(startingPoint, pointIndex));
-			calculatedValues[1 << pointIndex]->SetStepToMinimum(pointIndex);
+			//calculatedValues[1 << pointIndex]->SetStepToMinimum(pointIndex);
+			calculatedValues[1 << pointIndex]->TrySetMinimumStep(pointIndex, startingPoint, matrix->GetWeightOfEdge(startingPoint, pointIndex));
 		}
 		if (verbose) {
 			std::cout << "combination [ " << pointIndex << "] " << calculatedValues[1 << pointIndex]->GetValue(pointIndex) << std::endl;
@@ -203,32 +209,35 @@ Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int start
 	int storageIndexWithoutStartPoint =
 		(1 << matrix->GetSize()) - 1 &
 		~(1 << startingPoint);
-	calculatedValues[storageIndexWithoutStartPoint]->SetCost(endPoint, minValue);
-	calculatedValues[storageIndexWithoutStartPoint]->SetStepToMinimum(nextStepOfMin);
+	int storageIndexWithoutEndPoint =
+		(1 << matrix->GetSize()) - 1 &
+		~(1 << endPoint);
+	calculatedValues[(1 << matrix->GetSize()) - 1]->SetCost(endPoint, minValue);
+	//calculatedValues[storageIndexWithoutStartPoint]->SetStepToMinimum(nextStepOfMin);
+	calculatedValues[storageIndexWithoutStartPoint]->TrySetMinimumStep(endPoint, nextStepOfMin, minValue);
+	//calculatedValues[storageIndexWithoutStartPoint]->SetValueOfStepToMinimum(minValue);
 	if (verbose) {
 		std::cout << "minValue:" << minValue << " stepToMin: " << nextStepOfMin << std::endl;
 	}
 	else {
-		std::cout << "Uzyskana najkrotsza droga: " << minValue;
+		std::cout << "Uzyskana najkrotsza droga: " << minValue << std::endl;
 	}
 
 	/**
 	  * Generowanie œcie¿ki
 	  **/
 	Path* path = new Path();
-	int prevStep = endPoint;
-	int storageIndexPathBuilding = storageIndexWithoutStartPoint;
-	int newStep = -1;
+	int edgeBegin = endPoint;
+	int edgeEnd = -1;
+	int storageIndexPath = (1 << matrix->GetSize()) - 1;
 	for (int a = 0; a < matrix->GetSize(); a++) {
-		if (storageIndexPathBuilding > 0) {
-			newStep = calculatedValues[storageIndexPathBuilding]->GetStepToMinimum();
+		storageIndexPath &= ~(1 << edgeBegin);
+		edgeEnd = calculatedValues[storageIndexPath]->GetMinimumStepForDirection(edgeBegin);
+		if (edgeEnd == -1) {
+			edgeEnd = endPoint;
 		}
-		else {
-			newStep = startingPoint;
-		}
-		path->InsertEdge(Edge(prevStep, newStep, matrix->GetWeightOfEdge(prevStep, newStep)));
-		storageIndexPathBuilding &= ~(1 << newStep);
-		prevStep = newStep;
+		path->InsertEdge(Edge(edgeBegin, edgeEnd, matrix->GetWeightOfEdge(edgeBegin, edgeEnd)));
+		edgeBegin = edgeEnd;
 	}
 
 	for (int x = 0; x <= possibleVerticesCombinations; x++) {
@@ -240,4 +249,4 @@ Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int start
 	return path;
 }
 
-// 1. uwzglêdniæ startingPoint w obliczaniu drogi
+// 1. sprawdziæ poprawnoœæ po³¹czeñ z pierwszym i ostatnim wierzcho³kiem
