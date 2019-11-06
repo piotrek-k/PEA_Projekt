@@ -30,6 +30,9 @@
     <ClCompile Include="TS_ProblemSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DP_CombinationInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Edge.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TS_ProblemSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DP_CombinationInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

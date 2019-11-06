@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AdjacencyMatrix.cpp" />
+    <ClCompile Include="DP_CombinationInfo.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="PEA_Projekt.cpp" />
@@ -159,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdjacencyMatrix.h" />
+    <ClInclude Include="DP_CombinationInfo.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="TS_ProblemSolver.h" />

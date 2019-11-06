@@ -1,6 +1,7 @@
 #include "TS_ProblemSolver.h"
 #include <math.h>
 #include <bitset>
+#include "DP_CombinationInfo.h"
 
 Path* TS_ProblemSolver::UseBruteForce(AdjacencyMatrix* matrix, int startingPoint, int endPoint)
 {
@@ -43,9 +44,8 @@ void TS_ProblemSolver::BruteForce_SearchTree(AdjacencyMatrix* matrix, Path* curr
 }
 
 void pretty_print(const std::vector<int>& v) {
-	static int count = 0;
-	std::cout << "combination no " << (++count) << ": [ ";
-	for (int i = 0; i < v.size(); ++i) { std::cout << v[i]+1 << " "; }
+	std::cout << "combination " << ": [";
+	for (int i = 0; i < v.size(); ++i) { std::cout << v[i] + 1 << " "; }
 	std::cout << "] " << std::endl;
 }
 
@@ -62,12 +62,13 @@ std::bitset<8> print_binary(int number) {
 /// <param name="calculatedValues">Referencja do tablicy przechowuj¹cej dotychczasowe minimalne drogi</param>
 /// <param name="combination">Argument pomocniczy przy rekurencji. Wartoœæ startowa: pusty wektor</param>
 /// <param name="offset">Argument pomocniczy przy rekurencji. Wartoœæ startowa: 0</param>
-int TS_ProblemSolver::DynamicProgramming_GenerateCombinations(AdjacencyMatrix* matrix, int k, int** calculatedValues, int startPoint, int endPoint, bool verbose, std::vector<int> combination, int offset)
+void TS_ProblemSolver::DynamicProgramming_GenerateCombinations(AdjacencyMatrix* matrix, int k, DP_CombinationInfo** calculatedValues, int startPoint, int endPoint, bool verbose, std::vector<int> combination, int offset)
 {
 	int numberOfNodes = matrix->GetSize();
 
 	if (k == 0) {
-		return DynamicProgramming_CheckCombination(matrix, calculatedValues, startPoint, endPoint, verbose, combination);
+		DynamicProgramming_CheckCombination(matrix, calculatedValues, startPoint, endPoint, verbose, combination);
+		return;
 	}
 	for (int i = offset; i <= numberOfNodes - k; ++i) {
 		if (i == startPoint) {
@@ -78,22 +79,21 @@ int TS_ProblemSolver::DynamicProgramming_GenerateCombinations(AdjacencyMatrix* m
 		combination.pop_back();
 	}
 
-	return -1;
+	return;
 }
 
-int TS_ProblemSolver::DynamicProgramming_CheckCombination(AdjacencyMatrix* matrix, int** calculatedValues, int startPoint, int endPoint, bool verbose, std::vector<int> combination)
+void TS_ProblemSolver::DynamicProgramming_CheckCombination(AdjacencyMatrix* matrix, DP_CombinationInfo** calculatedValues, int startPoint, int endPoint, bool verbose, std::vector<int> combination)
 {
-	int minumumOfAll = INT_MAX;
+	// Wnêtrze funkcji przetwarza pojedynczy podzbiór S (combination) wraz z wszystkimi zakoñczeniami
+
+	//int minimumOfAllEndings = INT_MAX;
 
 	if (verbose) {
 		pretty_print(combination);
 	}
 
-	// pojedynczy podzbiór S o wielkoœci setSize
-	// S = combination
-
 	/**
-	 * Utworzenie indeksu
+	 * Utworzenie indeksu (np. dla zbioru [2,3]: 00001100)
 	 **/
 	int storageIndexOfCombination = 0; // interpretowaæ jako wartoœæ binarna. 1 - oznacza wierzcho³ek brany pod uwagê
 	for (int a = 0; a < combination.size(); a++) {
@@ -110,58 +110,52 @@ int TS_ProblemSolver::DynamicProgramming_CheckCombination(AdjacencyMatrix* matri
 		int storageIndexWithoutDestPoint = storageIndexOfCombination & ~(1 << destPointIndexInMatrix);
 
 		if (verbose) {
-			std::cout << "* storageIndexOfCombination " << print_binary(storageIndexOfCombination) << " withoutdestpoint " << print_binary(storageIndexWithoutDestPoint) << " destPoint: " << destPointIndexInMatrix + 1 << std::endl;
+			std::cout << "* storageIndexOfCombination " << print_binary(storageIndexOfCombination) << " withoutdestpoint " << print_binary(storageIndexWithoutDestPoint) << " destPoint: " << destPointIndexInMatrix << std::endl;
 		}
 
 		int foundMinValue = INT_MAX;
+		int stepToMinimumCost = -1;
 		for (int b = 0; b < combination.size(); b++) {
 			int indexToCheck = combination[b];
 			if (indexToCheck == destPointIndexInMatrix) {
 				continue;
 			}
 			if (verbose) {
-				std::cout << "* * checking " << indexToCheck + 1 << " calcVal: " << calculatedValues[storageIndexWithoutDestPoint][indexToCheck] << "+" << matrix->GetWeightOfEdge(indexToCheck, destPointIndexInMatrix) << std::endl;
+				std::cout << "* * checking index " << indexToCheck << "(" << print_binary(storageIndexWithoutDestPoint) << ")" << " with cost: " << calculatedValues[storageIndexWithoutDestPoint]->GetValue(indexToCheck) << "+" << matrix->GetWeightOfEdge(indexToCheck, destPointIndexInMatrix) << std::endl;
 			}
-			if (foundMinValue > calculatedValues[storageIndexWithoutDestPoint][indexToCheck] + matrix->GetWeightOfEdge(indexToCheck, destPointIndexInMatrix)) {
-				foundMinValue = calculatedValues[storageIndexWithoutDestPoint][indexToCheck] + matrix->GetWeightOfEdge(indexToCheck, destPointIndexInMatrix);
+			int candidate = calculatedValues[storageIndexWithoutDestPoint]->GetValue(indexToCheck) + matrix->GetWeightOfEdge(indexToCheck, destPointIndexInMatrix);
+			if (foundMinValue > candidate) {
+				foundMinValue = candidate;
+				stepToMinimumCost = indexToCheck;
 			}
 		}
 
-		calculatedValues[storageIndexOfCombination][destPointIndexInMatrix] = foundMinValue;
+		calculatedValues[storageIndexOfCombination]->SetCost(destPointIndexInMatrix, foundMinValue);
+		calculatedValues[storageIndexOfCombination]->SetStepToMinimum(stepToMinimumCost);
 		if (verbose) {
-			std::cout << "Saving " << foundMinValue << " into " << print_binary(storageIndexOfCombination) << " " << destPointIndexInMatrix << std::endl;
+			std::cout << "Saving " << foundMinValue << " into " << print_binary(storageIndexOfCombination) << ":" << destPointIndexInMatrix << " chosen stepToMinimumCost: " << stepToMinimumCost << std::endl;
 		}
 
-		if (foundMinValue < minumumOfAll) {
-			minumumOfAll = foundMinValue;
-		}
-
-		if (verbose) {
-			std::cout << "minFoundValue: " << foundMinValue << std::endl;
-		}
+		/*if (foundMinValue < minimumOfAllEndings) {
+			minimumOfAllEndings = foundMinValue;
+		}*/
 	}
 
-	if (verbose) {
-		std::cout << "minimum of all: " << minumumOfAll << std::endl;
-	}
-
-	return minumumOfAll;
+	/*if (verbose) {
+		std::cout << "minimum of all: " << minimumOfAllEndings << std::endl;
+	}*/
 }
 
 Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int startingPoint, int endPoint, bool verbose)
 {
 	int possibleVerticesCombinations = (int)pow(2, matrix->GetSize());
-	int** calculatedValues = new int* [1 << matrix->GetSize()];
+	DP_CombinationInfo** calculatedValues = new DP_CombinationInfo * [1 << matrix->GetSize()];
 
 	/**
 	  * Utworzenie tablicy
 	  **/
 	for (int x = 0; x <= possibleVerticesCombinations; x++) {
-		// inicjalizacja tablicy reprezentuj¹cej wierzcho³ki koñcowe dla ka¿dej z konfiguracji
-		calculatedValues[x] = new int[matrix->GetSize()];
-		for (int a = 0; a < matrix->GetSize(); a++) {
-			calculatedValues[x][a] = 0;
-		}
+		calculatedValues[x] = new DP_CombinationInfo(matrix->GetSize());
 	}
 
 	/**
@@ -174,39 +168,66 @@ Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int start
 		}
 
 		if (pointIndex != startingPoint) {
-			calculatedValues[1 << pointIndex][pointIndex] = matrix->GetWeightOfEdge(startingPoint, pointIndex);
+			calculatedValues[1 << pointIndex]->SetCost(pointIndex, matrix->GetWeightOfEdge(startingPoint, pointIndex));
+			calculatedValues[1 << pointIndex]->SetStepToMinimum(pointIndex);
 		}
 
-		std::cout << "combination [ " << pointIndex+1 << "] " << calculatedValues[1 << pointIndex][pointIndex] << std::endl;
+		std::cout << "combination [ " << pointIndex << "] " << calculatedValues[1 << pointIndex]->GetValue(pointIndex) << std::endl;
 	}
 
+	/**
+	  * Wype³nienie tablicy calculatedValues dla wszystkich pozosta³ych wielkoœci podzbiorów
+	  **/
 	for (int setSize = 2; setSize < matrix->GetSize(); setSize++) {
-		// iteracja przez wszystkie wielkoœci podzbiorów
-		// setSize = 1 zosta³ ju¿ wype³niony
-
 		TS_ProblemSolver::DynamicProgramming_GenerateCombinations(matrix, setSize, calculatedValues, 0, 0, true, std::vector<int>(), 0);
 	}
 
-	// powinno wygenerowaæ tylko jedn¹ kombinacjê
-	//int minimumPathCost = TS_ProblemSolver::DynamicProgramming_CheckCombination(matrix, calculatedValues, 0, 0, true, fullSet);
-	int storageIndexWithoutStartAndDestPoint = (1 << matrix->GetSize()) - 1;
-	//std::cout << "all1: " << print_binary(storageIndexWithoutStartAndDestPoint) << std::endl;
-	storageIndexWithoutStartAndDestPoint = storageIndexWithoutStartAndDestPoint & ~(1 << startingPoint) & ~(1 << endPoint);
-	//std::cout << "without startend: " << print_binary(storageIndexWithoutStartAndDestPoint) << std::endl;
-
+	/**
+	  * Znalezienie minimalnej drogi na podstawie danych z calculatedValues
+	  **/
+	int storageIndexWithoutStartAndDestPoint =
+		(1 << matrix->GetSize()) - 1 &
+		~(1 << startingPoint) &
+		~(1 << endPoint);
 	int minValue = INT_MAX;
+	int nextStepOfMin = -1;
 	for (int pointIndex = 0; pointIndex < matrix->GetSize(); pointIndex++) {
 		if (pointIndex == startingPoint || pointIndex == endPoint) {
 			continue;
 		}
-		int candidate = calculatedValues[storageIndexWithoutStartAndDestPoint][pointIndex] + matrix->GetWeightOfEdge(pointIndex, endPoint);
+		int candidate = calculatedValues[storageIndexWithoutStartAndDestPoint]->GetValue(pointIndex) + matrix->GetWeightOfEdge(pointIndex, endPoint);
 		if (candidate < minValue) {
 			minValue = candidate;
+			nextStepOfMin = pointIndex;
 		}
 	}
-	std::cout << "minValue:" << minValue << std::endl;
+	int storageIndexWithoutStartPoint =
+		(1 << matrix->GetSize()) - 1 &
+		~(1 << startingPoint);
+	calculatedValues[storageIndexWithoutStartPoint]->SetCost(endPoint, minValue);
+	calculatedValues[storageIndexWithoutStartPoint]->SetStepToMinimum(nextStepOfMin);
+	std::cout << "minValue:" << minValue << " stepToMin: " << nextStepOfMin << std::endl;
 
-	return new Path();
+	/**
+	  * Generowanie œcie¿ki
+	  **/
+	Path* path = new Path();
+	int prevStep = endPoint;
+	int storageIndexPathBuilding = storageIndexWithoutStartPoint;
+	int newStep = -1;
+	for (int a = 0; a < matrix->GetSize(); a++) {
+		if (storageIndexPathBuilding > 0) {
+			newStep = calculatedValues[storageIndexPathBuilding]->GetStepToMinimum();
+		}
+		else {
+			newStep = startingPoint;
+		}
+		path->InsertEdge(Edge(prevStep, newStep, matrix->GetWeightOfEdge(prevStep, newStep)));
+		storageIndexPathBuilding &= ~(1 << newStep);
+		prevStep = newStep;
+	}
+
+	return path;
 }
 
 // 1. uwzglêdniæ startingPoint w obliczaniu drogi
