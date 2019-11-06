@@ -5,7 +5,7 @@
 class AdjacencyMatrix
 {
 private:
-	Edge** matrix = nullptr;
+	Edge*** matrix = nullptr;
 	int size;
 public:
 	std::string name;
