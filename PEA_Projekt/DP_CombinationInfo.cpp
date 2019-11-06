@@ -9,6 +9,11 @@ DP_CombinationInfo::DP_CombinationInfo(int size)
 	stepToMinimum = -1;
 }
 
+DP_CombinationInfo::~DP_CombinationInfo()
+{
+	delete[] costsByDirection;
+}
+
 void DP_CombinationInfo::SetCost(int nodeIndex, int value)
 {
 	costsByDirection[nodeIndex] = value;
