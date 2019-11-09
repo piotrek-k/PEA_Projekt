@@ -6,7 +6,7 @@ class AdjacencyMatrix
 {
 private:
 	MatrixEdge*** matrix = nullptr;
-	int size;
+	int size = 0;
 public:
 	std::string name;
 	

@@ -139,7 +139,7 @@ void Path::GenerateRandom(int size)
 
 	int prevNodeIndex = -1;
 	int firstIndex = -1;
-	int currentNodeIndex;
+	int currentNodeIndex = -1;
 	for (int x = 0; x < size; x++) {
 		int vecSize = tempVec.size();
 		int positionInTempVector;

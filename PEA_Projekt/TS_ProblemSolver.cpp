@@ -86,8 +86,6 @@ void TS_ProblemSolver::DynamicProgramming_CheckCombination(AdjacencyMatrix* matr
 {
 	// Wnêtrze funkcji przetwarza pojedynczy podzbiór S (combination) wraz z wszystkimi zakoñczeniami
 
-	//int minimumOfAllEndings = INT_MAX;
-
 	if (verbose) {
 		pretty_print(combination);
 	}
@@ -113,14 +111,12 @@ int TS_ProblemSolver::DynamicProgramming_D(AdjacencyMatrix* matrix, DP_Combinati
 	/**
 	 * Utworzenie indeksu (np. dla zbioru [2,3]: 00001100)
 	 **/
-	int storageIndexOfCombination = 0; // interpretowaæ jako wartoœæ binarna. 1 - oznacza wierzcho³ek brany pod uwagê
+	unsigned long long int storageIndexOfCombination = 0; // interpretowaæ jako wartoœæ binarna. 1 - oznacza wierzcho³ek brany pod uwagê
 	for (int a = 0; a < combination.size(); a++) {
-		storageIndexOfCombination |= 1 << combination[a];
+		storageIndexOfCombination |= (unsigned long long int)1 << combination[a];
 	}
 
-	//std::cout << "Ustalanie kosztow dla kombinacji: " << storageIndexOfCombination;
-
-	int storageIndexWithoutDestPoint = storageIndexOfCombination & ~(1 << destPointIndexInMatrix);
+	unsigned long long int storageIndexWithoutDestPoint = storageIndexOfCombination & ~(1 << destPointIndexInMatrix);
 
 	if (verbose) {
 		std::cout << "* storageIndexOfCombination " << print_binary(storageIndexOfCombination) << " withoutdestpoint " << print_binary(storageIndexWithoutDestPoint) << " destPoint: " << destPointIndexInMatrix << std::endl;
@@ -145,8 +141,8 @@ int TS_ProblemSolver::DynamicProgramming_D(AdjacencyMatrix* matrix, DP_Combinati
 	}
 
 	calculatedValues[storageIndexOfCombination]->SetCombinationCostToDirection(destPointIndexInMatrix, foundMinValue);
-
 	calculatedValues[storageIndexWithoutDestPoint]->TrySetMinimumStep(destPointIndexInMatrix, stepToMinimumCost, foundMinValue);
+
 	if (verbose) {
 		std::cout << "* Saving " << foundMinValue << " into " << print_binary(storageIndexOfCombination) << ":" << destPointIndexInMatrix << std::endl;
 		std::cout << "* StepToMinimum dla " << print_binary(storageIndexWithoutDestPoint) << ": " << stepToMinimumCost << std::endl;
@@ -157,13 +153,13 @@ int TS_ProblemSolver::DynamicProgramming_D(AdjacencyMatrix* matrix, DP_Combinati
 
 Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int startingPoint, int endPoint, bool verbose)
 {
-	const int possibleVerticesCombinations = (int)pow(2, matrix->GetSize());
+	const unsigned long long int possibleVerticesCombinations = (int)pow(2, matrix->GetSize());
 	DP_CombinationInfo** calculatedValues = new DP_CombinationInfo * [possibleVerticesCombinations + 1];
 
 	/**
 	  * Utworzenie tablicy
 	  **/
-	for (int x = 0; x <= possibleVerticesCombinations; x++) {
+	for (unsigned long long int x = 0; x <= possibleVerticesCombinations; x++) {
 		calculatedValues[x] = new DP_CombinationInfo(matrix->GetSize());
 	}
 
@@ -214,7 +210,7 @@ Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int start
 	Path* path = new Path(matrix);
 	int edgeBegin = endPoint;
 	int edgeEnd = -1;
-	int storageIndexPath = (1 << matrix->GetSize()) - 1;
+	unsigned long long int storageIndexPath = ((unsigned long long int)1 << matrix->GetSize()) - 1;
 	for (int a = 0; a < matrix->GetSize(); a++) {
 		storageIndexPath &= ~(1 << edgeBegin);
 		edgeEnd = calculatedValues[storageIndexPath]->GetMinimumStepForDirection(edgeBegin);
@@ -225,6 +221,9 @@ Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int start
 		edgeBegin = edgeEnd;
 	}
 
+	/**
+	  * Zwolnienie pamiêci
+	  **/
 	for (int x = 0; x <= possibleVerticesCombinations; x++) {
 		delete calculatedValues[x];
 	}
