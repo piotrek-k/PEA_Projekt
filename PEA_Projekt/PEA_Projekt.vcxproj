@@ -155,6 +155,7 @@
     <ClCompile Include="DP_CombinationInfo.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Path.cpp" />
+    <ClCompile Include="PathEdge.cpp" />
     <ClCompile Include="PEA_Projekt.cpp" />
     <ClCompile Include="TS_ProblemSolver.cpp" />
   </ItemGroup>
@@ -163,6 +164,7 @@
     <ClInclude Include="DP_CombinationInfo.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Path.h" />
+    <ClInclude Include="PathEdge.h" />
     <ClInclude Include="TS_ProblemSolver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

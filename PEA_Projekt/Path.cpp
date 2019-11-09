@@ -6,6 +6,12 @@
 
 Path::Path()
 {
+	this->baseMatrix = new AdjacencyMatrix();
+}
+
+Path::Path(AdjacencyMatrix* baseMatrix)
+{
+	this->baseMatrix = baseMatrix;
 }
 
 Path::~Path()
@@ -14,18 +20,14 @@ Path::~Path()
 
 int Path::CalculateCost()
 {
-	int totalCost = 0;
-	for (int i = 0; i < this->path.size(); i++) {
-		totalCost += this->path[i].weight;
-	}
-	return totalCost;
+	return this->CalculateCost(this->path, this->baseMatrix);
 }
 
-int Path::CalculateCost(std::vector<Edge> path)
+int Path::CalculateCost(std::vector<PathEdge> path, AdjacencyMatrix* baseMatrix)
 {
 	int totalCost = 0;
 	for (int i = 0; i < path.size(); i++) {
-		totalCost += path[i].weight;
+		totalCost += baseMatrix->GetWeightOfEdge(path[i].from, path[i].to);
 	}
 	return totalCost;
 }
@@ -59,7 +61,7 @@ void Path::SetStartingPoint(int pointIndex)
 	lastPoint = pointIndex;
 }
 
-void Path::InsertEdge(Edge edge)
+void Path::InsertEdge(PathEdge edge)
 {
 	if (path.size() == 0 && this->startingPoint == -1) {
 		this->startingPoint = edge.from;
@@ -91,8 +93,19 @@ void Path::InsertNodeAtTheEnd(AdjacencyMatrix* matrix, int value)
 		return;
 	}
 
-	Edge e = Edge(lastPoint, value, matrix->GetWeightOfEdge(lastPoint, value));
+	PathEdge e = PathEdge(lastPoint, value);
 	InsertEdge(e);
+}
+
+void Path::Reverse()
+{
+	std::vector<PathEdge> reversed;
+
+	for (int a = this->path.size() - 1; a >= 0; a--) {
+		reversed.push_back(PathEdge(this->path[a].to, this->path[a].from));
+	}
+
+	this->path = reversed;
 }
 
 int Path::GetNumberOfNodes()
@@ -115,6 +128,7 @@ void Path::ReplaceWithOtherInstance(const Path& otherInstance)
 	this->startingPoint = otherInstance.startingPoint;
 	this->lastPoint = otherInstance.lastPoint;
 	this->path = otherInstance.path;
+	this->baseMatrix = otherInstance.baseMatrix;
 }
 
 void Path::GenerateRandom(AdjacencyMatrix* am, int size)
@@ -144,10 +158,8 @@ void Path::GenerateRandom(AdjacencyMatrix* am, int size)
 
 		if (prevNodeIndex != -1) {
 			path.push_back(
-				Edge(prevNodeIndex,
-					currentNodeIndex,
-					am->GetWeightOfEdge(prevNodeIndex, currentNodeIndex))
-			);
+				PathEdge(prevNodeIndex,
+					currentNodeIndex));
 			tempVec.erase(tempVec.begin() + positionInTempVector);
 		}
 
@@ -155,9 +167,8 @@ void Path::GenerateRandom(AdjacencyMatrix* am, int size)
 	}
 
 	path.push_back(
-		Edge(currentNodeIndex,
-			firstIndex,
-			am->GetWeightOfEdge(currentNodeIndex, firstIndex))
+		PathEdge(currentNodeIndex,
+			firstIndex)
 	);
 }
 
@@ -165,7 +176,7 @@ void Path::Display(std::ostream& stream)
 {
 	stream << "Wygenerowana sciezka: " << std::endl;
 	for (int a = 0; a < path.size(); a++) {
-		stream << path[a].from << "->" << path[a].to << "(" << path[a].weight << ") ";
+		stream << path[a].from << "->" << path[a].to << "(" << this->baseMatrix->GetWeightOfEdge(path[a].from, path[a].to) << ") ";
 	}
 	stream << "Koszt: " << CalculateCost() << std::endl;
 }

@@ -9,12 +9,13 @@ private:
 public:
 	DP_CombinationInfo(int size);
 	~DP_CombinationInfo();
-	void SetCost(int nodeIndex, int value);
-	//void SetStepToMinimum(int nodeIndex);
-	int GetValue(int nodeIndex);
-	//int GetStepToMinimum();
-	//int GetValueOfStepToMinimum();
-	//void SetValueOfStepToMinimum(int value);
+	void SetCombinationCostToDirection(int directionIndex, int cost);
+	int GetCostToDirection(int nodeIndex);
+	/// <summary>
+	/// Zwraca która wartoœæ ze zbioru powinna byæ "przedostatnia", ¿eby optymalnie dojœæ do wêz³a `direction`.
+	/// </summary>
+	/// <param name="direction"></param>
+	/// <returns></returns>
 	int GetMinimumStepForDirection(int direction);
 	void TrySetMinimumStep(int direction, int possibleNextStep, int possibleMinValue);
 };

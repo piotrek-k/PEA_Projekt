@@ -17,9 +17,9 @@ DP_CombinationInfo::~DP_CombinationInfo()
 	delete[] costsByDirection;
 }
 
-void DP_CombinationInfo::SetCost(int nodeIndex, int value)
+void DP_CombinationInfo::SetCombinationCostToDirection(int directionIndex, int cost)
 {
-	costsByDirection[nodeIndex] = value;
+	costsByDirection[directionIndex] = cost;
 }
 
 //void DP_CombinationInfo::SetStepToMinimum(int nodeIndex)
@@ -27,7 +27,12 @@ void DP_CombinationInfo::SetCost(int nodeIndex, int value)
 //	stepToMinimum = nodeIndex;
 //}
 
-int DP_CombinationInfo::GetValue(int nodeIndex)
+/// <summary>
+/// Znajdü koszt kombinacji w kierunku nodeIndex
+/// </summary>
+/// <param name="nodeIndex"></param>
+/// <returns></returns>
+int DP_CombinationInfo::GetCostToDirection(int nodeIndex)
 {
 	return costsByDirection[nodeIndex];
 }

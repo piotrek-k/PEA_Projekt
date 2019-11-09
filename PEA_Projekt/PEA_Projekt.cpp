@@ -71,7 +71,7 @@ int main()
 		break;
 		case 5:
 		{
-			Path* path = new Path();
+			Path* path = new Path(lastAM);
 			std::cout << "WprowadŸ dane (-1 konczy wprowadzanie):" << std::endl;
 			int weight = 0;
 			int from = 0;
@@ -88,7 +88,7 @@ int main()
 				std::cin >> from;
 				std::cout << "Do: " << std::endl;
 				std::cin >> to;
-				path->InsertEdge(Edge(from, to, weight));
+				path->InsertEdge(PathEdge(from, to));
 			} while (weight != -1);
 			path->Display(std::cout);
 		}
@@ -108,6 +108,8 @@ int main()
 		{
 			if (lastAM != NULL) {
 				Path* path = TS_ProblemSolver::UseDynamicProgramming(lastAM, 0, 0, false);
+				path->Display(std::cout);
+				path->Reverse();
 				path->Display(std::cout);
 			}
 			else {
