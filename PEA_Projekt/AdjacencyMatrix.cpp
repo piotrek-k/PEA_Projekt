@@ -57,7 +57,7 @@ void AdjacencyMatrix::LoadDataFromStream(std::istream& myfile, std::ostream* out
 				if (stream >> extractedWeight) {
 					//std::cout << col << " ";
 
-					this->matrix[row][col] = new Edge(row, col, extractedWeight);
+					this->matrix[row][col] = new MatrixEdge(extractedWeight);
 
 					col++;
 				}
@@ -91,9 +91,9 @@ void AdjacencyMatrix::LoadDataFromFile(const std::string& fileName)
 
 void AdjacencyMatrix::RebuildMatrix()
 {
-	this->matrix = new Edge ** [this->size];
+	this->matrix = new MatrixEdge ** [this->size];
 	for (int a = 0; a < this->size; a++) {
-		this->matrix[a] = new Edge*[this->size];
+		this->matrix[a] = new MatrixEdge *[this->size];
 	}
 }
 
@@ -114,7 +114,7 @@ void AdjacencyMatrix::BuildRandomly(int size, int min, int max)
 			else {
 				number = -1;
 			}
-			this->matrix[col][row] = new Edge(col, row, number);
+			this->matrix[col][row] = new MatrixEdge(number);
 		}
 	}
 }

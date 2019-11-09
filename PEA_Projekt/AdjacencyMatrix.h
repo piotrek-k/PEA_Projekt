@@ -1,11 +1,11 @@
 #pragma once
 #include <string>
 #include <iostream>
-#include "Edge.h"
+#include "MatrixEdge.h"
 class AdjacencyMatrix
 {
 private:
-	Edge*** matrix = nullptr;
+	MatrixEdge*** matrix = nullptr;
 	int size;
 public:
 	std::string name;

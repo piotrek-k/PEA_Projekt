@@ -5,12 +5,12 @@
 
 Path* TS_ProblemSolver::UseBruteForce(AdjacencyMatrix* matrix, int startingPoint, int endPoint)
 {
-	Path* tempPath = new Path();
+	Path* tempPath = new Path(matrix);
 	tempPath->SetStartingPoint(startingPoint);
 
 	int bestValue = -1;
 
-	Path* bestPath = new Path();
+	Path* bestPath = new Path(matrix);
 
 	BruteForce_SearchTree(matrix, tempPath, &bestValue, bestPath, startingPoint, endPoint);
 
@@ -20,7 +20,7 @@ Path* TS_ProblemSolver::UseBruteForce(AdjacencyMatrix* matrix, int startingPoint
 void TS_ProblemSolver::BruteForce_SearchTree(AdjacencyMatrix* matrix, Path* currentlyCheckedPath, int* bestValue, Path* bestPath, int startPoint, int endPoint)
 {
 	if (currentlyCheckedPath->GetNumberOfNodes() == matrix->GetSize()) {
-		currentlyCheckedPath->InsertNodeAtTheEnd(matrix, endPoint);
+		currentlyCheckedPath->InsertNodeAtTheEnd(endPoint);
 		int result = currentlyCheckedPath->CalculateCost();
 
 		if (*bestValue == -1 || result < *bestValue) {
@@ -36,7 +36,7 @@ void TS_ProblemSolver::BruteForce_SearchTree(AdjacencyMatrix* matrix, Path* curr
 			continue;
 		}
 		if (currentlyCheckedPath->ValueCanBeConnectedToEnd(a)) {
-			currentlyCheckedPath->InsertNodeAtTheEnd(matrix, a);
+			currentlyCheckedPath->InsertNodeAtTheEnd(a);
 			BruteForce_SearchTree(matrix, currentlyCheckedPath, bestValue, bestPath, startPoint, endPoint);
 			currentlyCheckedPath->RemoveLastEdge();
 		}
@@ -202,7 +202,7 @@ Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int start
 	int minValue = DynamicProgramming_D(matrix, calculatedValues, startingPoint, endPoint, endPoint, verbose, combination);
 
 	if (verbose) {
-		std::cout << "minValue:" << minValue << std::endl; //" stepToMin: " << nextStepOfMin
+		std::cout << "minValue:" << minValue << std::endl;
 	}
 	else {
 		std::cout << "Uzyskana najkrotsza droga: " << minValue << std::endl;
@@ -231,7 +231,7 @@ Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int start
 	delete[] calculatedValues;
 	calculatedValues = NULL;
 
+	path->Reverse(); // w przypadku niesymetrycznych macierzy, œcie¿ka bêdzie odwrotna
+
 	return path;
 }
-
-// 1. sprawdziæ poprawnoœæ po³¹czeñ z pierwszym i ostatnim wierzcho³kiem

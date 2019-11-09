@@ -8,4 +8,4 @@ data16  data16:   156
 data17  data17:   183
 data18  data18:   187
 
-11, 14, 16, 17(d)
+17(d)

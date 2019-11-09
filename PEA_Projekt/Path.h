@@ -1,5 +1,5 @@
 #pragma once
-#include "Edge.h"
+#include "MatrixEdge.h"
 #include <vector>
 #include "AdjacencyMatrix.h"
 #include "PathEdge.h"
@@ -7,35 +7,49 @@
 class Path
 {
 private:
+	// potrzebne dla œcie¿ki jednoelementowej
 	int startingPoint = -1;
-	int lastPoint = -1;
+
 	std::vector<PathEdge> path;
 	AdjacencyMatrix* baseMatrix;
 
 public:
-	Path();
 	Path(AdjacencyMatrix* baseMatrix);
-	//Path(const Path& otherInstance);
 	~Path();
 
 	int CalculateCost();
 	static int CalculateCost(std::vector<PathEdge> path, AdjacencyMatrix* baseMatrix);
 
+	/// <summary>
+	/// Sprawdza czy w œcie¿ce istnieje podana krawêdŸ
+	/// </summary>
 	bool ContainsValue(int from, int to);
+	/// <summary>
+	/// Sprawdza czy wêze³ `value` zosta³ ju¿ u¿yty jako wêze³ docelowy
+	/// </summary>
 	bool ValueCanBeConnectedToEnd(int value);
 
 	void SetStartingPoint(int pointIndex);
 
 	void InsertEdge(PathEdge edge);
 	void RemoveLastEdge();
-	void InsertNodeAtTheEnd(AdjacencyMatrix*matrix, int value);
+	/// <summary>
+	/// Dopisuje wêze³ na koniec œcie¿ki
+	/// </summary>
+	/// <param name="value"></param>
+	void InsertNodeAtTheEnd(int value);
+	/// <summary>
+	/// Odwraca kolejnoœæ wêz³ów w œcie¿ce
+	/// </summary>
 	void Reverse();
 
 	int GetNumberOfNodes();
 
+	int GetLastNode();
+
 	void ReplaceWithOtherInstance(const Path& otherInstance);
 
-	void GenerateRandom(AdjacencyMatrix* matrix, int size);
+	void GenerateRandom(int size);
 	void Display(std::ostream& stream);
 };
 

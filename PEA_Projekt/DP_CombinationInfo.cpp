@@ -22,16 +22,6 @@ void DP_CombinationInfo::SetCombinationCostToDirection(int directionIndex, int c
 	costsByDirection[directionIndex] = cost;
 }
 
-//void DP_CombinationInfo::SetStepToMinimum(int nodeIndex)
-//{
-//	stepToMinimum = nodeIndex;
-//}
-
-/// <summary>
-/// Znajdü koszt kombinacji w kierunku nodeIndex
-/// </summary>
-/// <param name="nodeIndex"></param>
-/// <returns></returns>
 int DP_CombinationInfo::GetCostToDirection(int nodeIndex)
 {
 	return costsByDirection[nodeIndex];
@@ -49,18 +39,3 @@ void DP_CombinationInfo::TrySetMinimumStep(int direction, int possibleNextStep, 
 		stepsToMinimumByEnding[direction] = possibleNextStep;
 	}
 }
-
-//int DP_CombinationInfo::GetStepToMinimum()
-//{
-//	return stepToMinimum;
-//}
-//
-//int DP_CombinationInfo::GetValueOfStepToMinimum()
-//{
-//	return valueOfStepToMinimum;
-//}
-//
-//void DP_CombinationInfo::SetValueOfStepToMinimum(int value)
-//{
-//	valueOfStepToMinimum = value;
-//}
