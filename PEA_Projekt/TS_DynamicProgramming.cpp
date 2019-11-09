@@ -1,47 +1,7 @@
-#include "TS_ProblemSolver.h"
+#include "TS_DynamicProgramming.h"
 #include <math.h>
 #include <bitset>
 #include "DP_CombinationInfo.h"
-
-Path* TS_ProblemSolver::UseBruteForce(AdjacencyMatrix* matrix, int startingPoint, int endPoint)
-{
-	Path* tempPath = new Path(matrix);
-	tempPath->SetStartingPoint(startingPoint);
-
-	int bestValue = -1;
-
-	Path* bestPath = new Path(matrix);
-
-	BruteForce_SearchTree(matrix, tempPath, &bestValue, bestPath, startingPoint, endPoint);
-
-	return bestPath;
-}
-
-void TS_ProblemSolver::BruteForce_SearchTree(AdjacencyMatrix* matrix, Path* currentlyCheckedPath, int* bestValue, Path* bestPath, int startPoint, int endPoint)
-{
-	if (currentlyCheckedPath->GetNumberOfNodes() == matrix->GetSize()) {
-		currentlyCheckedPath->InsertNodeAtTheEnd(endPoint);
-		int result = currentlyCheckedPath->CalculateCost();
-
-		if (*bestValue == -1 || result < *bestValue) {
-			*bestValue = result;
-			bestPath->ReplaceWithOtherInstance(*currentlyCheckedPath);
-		}
-		currentlyCheckedPath->RemoveLastEdge();
-		return;
-	}
-
-	for (int a = 0; a < matrix->GetSize(); a++) {
-		if (a == startPoint || a == endPoint) {
-			continue;
-		}
-		if (currentlyCheckedPath->ValueCanBeConnectedToEnd(a)) {
-			currentlyCheckedPath->InsertNodeAtTheEnd(a);
-			BruteForce_SearchTree(matrix, currentlyCheckedPath, bestValue, bestPath, startPoint, endPoint);
-			currentlyCheckedPath->RemoveLastEdge();
-		}
-	}
-}
 
 void pretty_print(const std::vector<int>& v) {
 	std::cout << "combination " << ": [";
@@ -62,7 +22,7 @@ std::bitset<8> print_binary(int number) {
 /// <param name="calculatedValues">Referencja do tablicy przechowuj¹cej dotychczasowe minimalne drogi</param>
 /// <param name="combination">Argument pomocniczy przy rekurencji. Wartoœæ startowa: pusty wektor</param>
 /// <param name="offset">Argument pomocniczy przy rekurencji. Wartoœæ startowa: 0</param>
-void TS_ProblemSolver::DynamicProgramming_GenerateCombinations(AdjacencyMatrix* matrix, int k, DP_CombinationInfo** calculatedValues, int startPoint, int endPoint, bool verbose, std::vector<int> combination, int offset)
+void TS_DynamicProgramming::DynamicProgramming_GenerateCombinations(AdjacencyMatrix* matrix, int k, DP_CombinationInfo** calculatedValues, int startPoint, int endPoint, bool verbose, std::vector<int> combination, int offset)
 {
 	int numberOfNodes = matrix->GetSize();
 
@@ -82,7 +42,7 @@ void TS_ProblemSolver::DynamicProgramming_GenerateCombinations(AdjacencyMatrix* 
 	return;
 }
 
-void TS_ProblemSolver::DynamicProgramming_CheckCombination(AdjacencyMatrix* matrix, DP_CombinationInfo** calculatedValues, int startPoint, int endPoint, bool verbose, std::vector<int> combination)
+void TS_DynamicProgramming::DynamicProgramming_CheckCombination(AdjacencyMatrix* matrix, DP_CombinationInfo** calculatedValues, int startPoint, int endPoint, bool verbose, std::vector<int> combination)
 {
 	// Wnêtrze funkcji przetwarza pojedynczy podzbiór S (combination) wraz z wszystkimi zakoñczeniami
 
@@ -106,7 +66,7 @@ void TS_ProblemSolver::DynamicProgramming_CheckCombination(AdjacencyMatrix* matr
 /// przechodz¹cej przez punkty z "combination" i koñcz¹cej siê na destPointIndexInMatrix.
 /// Obliczana wartoœæ to minimum z kosztów kombinacji nie zawieraj¹cych destPointIndexInMatrix.
 /// </summary>
-int TS_ProblemSolver::DynamicProgramming_D(AdjacencyMatrix* matrix, DP_CombinationInfo** calculatedValues, int startPoint, int endPoint, int destPointIndexInMatrix, bool verbose, std::vector<int> combination)
+int TS_DynamicProgramming::DynamicProgramming_D(AdjacencyMatrix* matrix, DP_CombinationInfo** calculatedValues, int startPoint, int endPoint, int destPointIndexInMatrix, bool verbose, std::vector<int> combination)
 {
 	/**
 	 * Utworzenie indeksu (np. dla zbioru [2,3]: 00001100)
@@ -151,7 +111,7 @@ int TS_ProblemSolver::DynamicProgramming_D(AdjacencyMatrix* matrix, DP_Combinati
 	return foundMinValue;
 }
 
-Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int startingPoint, int endPoint, bool verbose)
+Path* TS_DynamicProgramming::UseDynamicProgramming(AdjacencyMatrix* matrix, int startingPoint, int endPoint, bool verbose)
 {
 	const unsigned long long int possibleVerticesCombinations = (int)pow(2, matrix->GetSize());
 	DP_CombinationInfo** calculatedValues = new DP_CombinationInfo * [possibleVerticesCombinations + 1];
@@ -185,7 +145,7 @@ Path* TS_ProblemSolver::UseDynamicProgramming(AdjacencyMatrix* matrix, int start
 	  * Wype³nienie tablicy calculatedValues dla wszystkich pozosta³ych wielkoœci podzbiorów
 	  **/
 	for (int setSize = 2; setSize < matrix->GetSize(); setSize++) {
-		TS_ProblemSolver::DynamicProgramming_GenerateCombinations(matrix, setSize, calculatedValues, 0, 0, verbose, std::vector<int>(), 0);
+		TS_DynamicProgramming::DynamicProgramming_GenerateCombinations(matrix, setSize, calculatedValues, 0, 0, verbose, std::vector<int>(), 0);
 	}
 
 	/**

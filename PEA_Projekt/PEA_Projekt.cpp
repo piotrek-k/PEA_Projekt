@@ -5,8 +5,9 @@
 #include <string>
 #include "AdjacencyMatrix.h"
 #include "Path.h"
-#include "TS_ProblemSolver.h"
+#include "TS_DynamicProgramming.h"
 #include "TS_BranchAndBound.h"
+#include "TS_BruteForce.h"
 
 int main()
 {
@@ -98,7 +99,7 @@ int main()
 		case 6:
 		{
 			if (lastAM != NULL) {
-				Path* path = TS_ProblemSolver::UseBruteForce(lastAM, 0, 0);
+				Path* path = TS_BruteForce::UseBruteForce(lastAM, 0, 0);
 				path->Display(std::cout);
 			}
 			else {
@@ -109,7 +110,7 @@ int main()
 		case 7:
 		{
 			if (lastAM != NULL) {
-				Path* path = TS_ProblemSolver::UseDynamicProgramming(lastAM, 0, 0, false);
+				Path* path = TS_DynamicProgramming::UseDynamicProgramming(lastAM, 0, 0, false);
 				path->Display(std::cout);
 			}
 			else {

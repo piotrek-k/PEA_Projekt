@@ -24,9 +24,6 @@
     <ClCompile Include="Path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TS_ProblemSolver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DP_CombinationInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,15 +36,18 @@
     <ClCompile Include="TS_BranchAndBound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TS_BruteForce.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TS_DynamicProgramming.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdjacencyMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Path.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TS_ProblemSolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DP_CombinationInfo.h">
@@ -60,6 +60,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TS_BranchAndBound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TS_BruteForce.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TS_DynamicProgramming.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
