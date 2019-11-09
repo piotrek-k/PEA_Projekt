@@ -36,6 +36,9 @@
     <ClCompile Include="MatrixEdge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TS_BranchAndBound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdjacencyMatrix.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MatrixEdge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TS_BranchAndBound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -157,6 +157,7 @@
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="PathEdge.cpp" />
     <ClCompile Include="PEA_Projekt.cpp" />
+    <ClCompile Include="TS_BranchAndBound.cpp" />
     <ClCompile Include="TS_ProblemSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +166,7 @@
     <ClInclude Include="MatrixEdge.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="PathEdge.h" />
+    <ClInclude Include="TS_BranchAndBound.h" />
     <ClInclude Include="TS_ProblemSolver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

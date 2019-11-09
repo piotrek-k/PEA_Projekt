@@ -56,6 +56,11 @@ void Path::SetStartingPoint(int pointIndex)
 	startingPoint = pointIndex;
 }
 
+int Path::GetStartingPoint()
+{
+	return startingPoint;
+}
+
 void Path::InsertEdge(PathEdge edge)
 {
 	if (path.size() == 0 && this->startingPoint == -1) {
@@ -64,13 +69,17 @@ void Path::InsertEdge(PathEdge edge)
 	this->path.push_back(edge);
 }
 
-void Path::RemoveLastEdge()
+int Path::RemoveLastEdge()
 {
 	if (path.size() == 0) {
-		return;
+		return GetLastNode();
 	}
 
+	int lastNode = GetLastNode();
+
 	path.pop_back();
+
+	return lastNode;
 }
 
 void Path::InsertNodeAtTheEnd(int value)

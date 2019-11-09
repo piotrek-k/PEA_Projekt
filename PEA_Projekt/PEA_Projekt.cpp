@@ -6,6 +6,7 @@
 #include "AdjacencyMatrix.h"
 #include "Path.h"
 #include "TS_ProblemSolver.h"
+#include "TS_BranchAndBound.h"
 
 int main()
 {
@@ -23,6 +24,7 @@ int main()
 		std::cout << "5. Funkcja celu: wprowadzanie reczne" << std::endl;
 		std::cout << "6. Brute Force" << std::endl;
 		std::cout << "7. Dynamic programming" << std::endl;
+		std::cout << "8. Branch & Bound" << std::endl;
 
 		std::cin >> action;
 
@@ -108,6 +110,17 @@ int main()
 		{
 			if (lastAM != NULL) {
 				Path* path = TS_ProblemSolver::UseDynamicProgramming(lastAM, 0, 0, false);
+				path->Display(std::cout);
+			}
+			else {
+				std::cout << "lastAM null" << std::endl;
+			}
+		}
+		break;
+		case 8:
+		{
+			if (lastAM != NULL) {
+				Path* path = TS_BranchAndBound::UseBranchAndBound(lastAM, 0);
 				path->Display(std::cout);
 			}
 			else {

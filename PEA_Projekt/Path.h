@@ -30,9 +30,10 @@ public:
 	bool ValueCanBeConnectedToEnd(int value);
 
 	void SetStartingPoint(int pointIndex);
+	int GetStartingPoint();
 
 	void InsertEdge(PathEdge edge);
-	void RemoveLastEdge();
+	int RemoveLastEdge();
 	/// <summary>
 	/// Dopisuje wêze³ na koniec œcie¿ki
 	/// </summary>
