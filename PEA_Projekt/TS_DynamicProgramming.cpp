@@ -3,6 +3,9 @@
 #include <bitset>
 #include "DP_CombinationInfo.h"
 
+#include <windows.h>
+#include <Psapi.h>
+
 void pretty_print(const std::vector<int>& v) {
 	std::cout << "combination " << ": [";
 	for (int i = 0; i < v.size(); ++i) { std::cout << v[i] + 1 << " "; }
@@ -180,6 +183,14 @@ Path* TS_DynamicProgramming::UseDynamicProgramming(AdjacencyMatrix* matrix, int 
 		path->InsertEdge(PathEdge(edgeBegin, edgeEnd));
 		edgeBegin = edgeEnd;
 	}
+
+	/**
+      * Pomiar pamiêci
+	  **/
+
+	PROCESS_MEMORY_COUNTERS memCounter;
+	BOOL result = K32GetProcessMemoryInfo(GetCurrentProcess(), &memCounter, sizeof(memCounter));
+	std::cout << "WorkingSetSize " << memCounter.WorkingSetSize << std::endl;
 
 	/**
 	  * Zwolnienie pamiêci
