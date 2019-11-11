@@ -8,6 +8,7 @@
 #include "TS_DynamicProgramming.h"
 #include "TS_BranchAndBound.h"
 #include "TS_BruteForce.h"
+#include "TimeCounter.h"
 
 int main()
 {
@@ -99,7 +100,12 @@ int main()
 		case 6:
 		{
 			if (lastAM != NULL) {
+				TimeCounter* timeCounter = new TimeCounter();
+				timeCounter->ResetCounter();
+				timeCounter->StartNextMeasurement();
 				Path* path = TS_BruteForce::UseBruteForce(lastAM, 0, 0);
+				timeCounter->EndSingleMeasurement();
+				std::cout << "Czas wykonania algorytmu: " << timeCounter->Summarize() << "ms" << std::endl;
 				path->Display(std::cout);
 			}
 			else {
@@ -110,7 +116,12 @@ int main()
 		case 7:
 		{
 			if (lastAM != NULL) {
+				TimeCounter* timeCounter = new TimeCounter();
+				timeCounter->ResetCounter();
+				timeCounter->StartNextMeasurement();
 				Path* path = TS_DynamicProgramming::UseDynamicProgramming(lastAM, 0, 0, false);
+				timeCounter->EndSingleMeasurement();
+				std::cout << "Czas wykonania algorytmu: " << timeCounter->Summarize() << "ms" << std::endl;
 				path->Display(std::cout);
 			}
 			else {
@@ -121,7 +132,12 @@ int main()
 		case 8:
 		{
 			if (lastAM != NULL) {
+				TimeCounter* timeCounter = new TimeCounter();
+				timeCounter->ResetCounter();
+				timeCounter->StartNextMeasurement();
 				Path* path = TS_BranchAndBound::UseBranchAndBound(lastAM, 0);
+				timeCounter->EndSingleMeasurement();
+				std::cout << "Czas wykonania algorytmu: " << timeCounter->Summarize() << "ms" << std::endl;
 				path->Display(std::cout);
 			}
 			else {

@@ -157,6 +157,7 @@
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="PathEdge.cpp" />
     <ClCompile Include="PEA_Projekt.cpp" />
+    <ClCompile Include="TimeCounter.cpp" />
     <ClCompile Include="TS_BranchAndBound.cpp" />
     <ClCompile Include="TS_BruteForce.cpp" />
     <ClCompile Include="TS_DynamicProgramming.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="MatrixEdge.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="PathEdge.h" />
+    <ClInclude Include="TimeCounter.h" />
     <ClInclude Include="TS_BranchAndBound.h" />
     <ClInclude Include="TS_BruteForce.h" />
     <ClInclude Include="TS_DynamicProgramming.h" />
