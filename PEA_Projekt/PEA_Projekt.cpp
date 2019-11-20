@@ -3,12 +3,14 @@
 
 #include <iostream>
 #include <string>
+#include<fstream>
 #include "AdjacencyMatrix.h"
 #include "Path.h"
 #include "TS_DynamicProgramming.h"
 #include "TS_BranchAndBound.h"
 #include "TS_BruteForce.h"
 #include "TimeCounter.h"
+#include "BulkDataTester.h"
 
 int main()
 {
@@ -27,6 +29,7 @@ int main()
 		std::cout << "6. Brute Force" << std::endl;
 		std::cout << "7. Dynamic programming" << std::endl;
 		std::cout << "8. Branch & Bound" << std::endl;
+		std::cout << "9. Pomiary dla etapu 1." << std::endl;
 
 		std::cin >> action;
 
@@ -145,6 +148,21 @@ int main()
 			}
 		}
 		break;
+		case 9:
+		{
+			std::string path;
+			std::cout << "Sciezka do listy plikow (lista powinna byc w tym samym folderze co dane): " << std::endl;
+			std::cin >> path;
+			BulkDataTester tester = BulkDataTester();
+			tester.LoadFileNames(path, std::cout);
+			std::ofstream results_file;
+			std::string pathToResults = tester.basePath + "\\testing_RESULTS.txt";
+			results_file.open(pathToResults);
+			std::cout << "Wyniki w " << pathToResults << std::endl;
+
+			std::cout << "== TEST B&B: ==" << std::endl;
+			tester.TestAlgorithm(TS_BranchAndBound::UseBranchAndBound, results_file, std::cout, 10);
+		}
 		}
 	}
 }

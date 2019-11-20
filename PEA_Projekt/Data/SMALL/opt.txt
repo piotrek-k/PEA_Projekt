@@ -7,5 +7,3 @@ data15  data15:   291
 data16  data16:   156
 data17  data17:   183
 data18  data18:   187
-
-17(d)
