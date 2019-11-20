@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AdjacencyMatrix.cpp" />
+    <ClCompile Include="AlgorithmResultContainer.cpp" />
     <ClCompile Include="BulkDataTester.cpp" />
     <ClCompile Include="DP_CombinationInfo.cpp" />
     <ClCompile Include="MatrixEdge.cpp" />
@@ -165,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdjacencyMatrix.h" />
+    <ClInclude Include="AlgorithmResultContainer.h" />
     <ClInclude Include="BulkDataTester.h" />
     <ClInclude Include="DP_CombinationInfo.h" />
     <ClInclude Include="MatrixEdge.h" />

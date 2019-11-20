@@ -114,7 +114,12 @@ int TS_DynamicProgramming::DynamicProgramming_D(AdjacencyMatrix* matrix, DP_Comb
 	return foundMinValue;
 }
 
-Path* TS_DynamicProgramming::UseDynamicProgramming(AdjacencyMatrix* matrix, int startingPoint, bool verbose)
+AlgorithmResultContainer* TS_DynamicProgramming::UseDynamicProgramming(AdjacencyMatrix* matrix, int startingPoint)
+{
+	return UseDynamicProgramming(matrix, startingPoint, false);
+}
+
+AlgorithmResultContainer* TS_DynamicProgramming::UseDynamicProgramming(AdjacencyMatrix* matrix, int startingPoint, bool verbose)
 {
 	const unsigned long long int possibleVerticesCombinations = (int)pow(2, matrix->GetSize());
 	DP_CombinationInfo** calculatedValues = new DP_CombinationInfo * [possibleVerticesCombinations + 1];
@@ -190,7 +195,8 @@ Path* TS_DynamicProgramming::UseDynamicProgramming(AdjacencyMatrix* matrix, int 
 
 	PROCESS_MEMORY_COUNTERS memCounter;
 	BOOL result = K32GetProcessMemoryInfo(GetCurrentProcess(), &memCounter, sizeof(memCounter));
-	std::cout << "WorkingSetSize " << memCounter.WorkingSetSize << std::endl;
+	int memoryUsed = memCounter.WorkingSetSize;
+	std::cout << "WorkingSetSize " << memoryUsed << std::endl;
 
 	/**
 	  * Zwolnienie pamiêci
@@ -203,5 +209,6 @@ Path* TS_DynamicProgramming::UseDynamicProgramming(AdjacencyMatrix* matrix, int 
 
 	path->Reverse(); // w przypadku niesymetrycznych macierzy, œcie¿ka bêdzie odwrotna
 
-	return path;
+	//return path;
+	return new AlgorithmResultContainer(path, memoryUsed);
 }

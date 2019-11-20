@@ -48,22 +48,25 @@ void BulkDataTester::LoadFileNames(std::string& fileNamesStoragePath, std::ostre
 	}
 }
 
-void BulkDataTester::TestAlgorithm(Path* algorithm(AdjacencyMatrix*, int), std::ostream& fileStream, std::ostream& consoleStream, int repetitions)
+void BulkDataTester::TestAlgorithm(AlgorithmResultContainer* algorithm(AdjacencyMatrix*, int), std::ostream& fileStream, std::ostream& consoleStream, int repetitions)
 {
 	for (int a = 0; a < fileNames.size(); a++) {
 		TimeCounter* timeCounter = new TimeCounter();
 		timeCounter->ResetCounter();
 
 		consoleStream << "Testing: " << fileNames[a] << endl;
+		long long int sumOfMemUsage = 0;
 		for (int c = 0; c < repetitions; c++) {
 			consoleStream << ".";
 			timeCounter->StartNextMeasurement();
-			Path* path = algorithm(&matrices[a], 0);
+			AlgorithmResultContainer* result = algorithm(&matrices[a], 0);
+			sumOfMemUsage += result->memoryUsed;
 			timeCounter->EndSingleMeasurement();
 		}
 
+		auto memUsed = sumOfMemUsage / (float)repetitions;
 		auto timeMeasured = timeCounter->Summarize();
-		fileStream << fileNames[a] << " " << repetitions << " " << timeMeasured << endl;
+		fileStream << fileNames[a] << " " << repetitions << " " << timeMeasured << " " << memUsed << endl;
 		consoleStream << "Sredni czas wykonania algorytmu: " << timeMeasured << "ms dla " << repetitions << "powtorzen." << std::endl;
 	}
 }

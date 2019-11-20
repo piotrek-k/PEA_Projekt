@@ -122,10 +122,10 @@ int main()
 				TimeCounter* timeCounter = new TimeCounter();
 				timeCounter->ResetCounter();
 				timeCounter->StartNextMeasurement();
-				Path* path = TS_DynamicProgramming::UseDynamicProgramming(lastAM, 0, false);
+				AlgorithmResultContainer* result = TS_DynamicProgramming::UseDynamicProgramming(lastAM, 0, false);
 				timeCounter->EndSingleMeasurement();
 				std::cout << "Czas wykonania algorytmu: " << timeCounter->Summarize() << "ms" << std::endl;
-				path->Display(std::cout);
+				result->path->Display(std::cout);
 			}
 			else {
 				std::cout << "lastAM null" << std::endl;
@@ -138,10 +138,10 @@ int main()
 				TimeCounter* timeCounter = new TimeCounter();
 				timeCounter->ResetCounter();
 				timeCounter->StartNextMeasurement();
-				Path* path = TS_BranchAndBound::UseBranchAndBound(lastAM, 0);
+				AlgorithmResultContainer* result = TS_BranchAndBound::UseBranchAndBound(lastAM, 0);
 				timeCounter->EndSingleMeasurement();
 				std::cout << "Czas wykonania algorytmu: " << timeCounter->Summarize() << "ms" << std::endl;
-				path->Display(std::cout);
+				result->path->Display(std::cout);
 			}
 			else {
 				std::cout << "lastAM null" << std::endl;
@@ -160,7 +160,11 @@ int main()
 			results_file.open(pathToResults);
 			std::cout << "Wyniki w " << pathToResults << std::endl;
 
+			std::cout << "== TEST DP: ==" << std::endl;
+			results_file << "== TEST DP: ==" << std::endl;
+			tester.TestAlgorithm(TS_DynamicProgramming::UseDynamicProgramming, results_file, std::cout, 10);
 			std::cout << "== TEST B&B: ==" << std::endl;
+			results_file << "== TEST B&B: ==" << std::endl;
 			tester.TestAlgorithm(TS_BranchAndBound::UseBranchAndBound, results_file, std::cout, 10);
 		}
 		}

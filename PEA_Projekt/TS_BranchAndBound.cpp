@@ -1,9 +1,10 @@
 #include "TS_BranchAndBound.h"
 #include <queue>
+#include "AlgorithmResultContainer.h"
 
 using namespace std;
 
-Path* TS_BranchAndBound::UseBranchAndBound(AdjacencyMatrix* matrix, int startingPoint)
+AlgorithmResultContainer* TS_BranchAndBound::UseBranchAndBound(AdjacencyMatrix* matrix, int startingPoint)
 {
 	Path* tempPath = new Path(matrix);
 	tempPath->SetStartingPoint(startingPoint);
@@ -14,7 +15,7 @@ Path* TS_BranchAndBound::UseBranchAndBound(AdjacencyMatrix* matrix, int starting
 
 	//bestPath->Reverse();
 
-	return bestPath;
+	return new AlgorithmResultContainer(bestPath, -1);
 }
 
 int TS_BranchAndBound::LowerBound(AdjacencyMatrix* matrix, Path* currentlyCheckedPath)

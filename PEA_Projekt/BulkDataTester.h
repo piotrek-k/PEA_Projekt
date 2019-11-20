@@ -2,6 +2,7 @@
 #include <string>
 #include "AdjacencyMatrix.h"
 #include "Path.h"
+#include "AlgorithmResultContainer.h"
 class BulkDataTester
 {
 private:
@@ -10,6 +11,6 @@ private:
 public:
 	std::string basePath;
 	void LoadFileNames(std::string& fileNamesStoragePath, std::ostream& progressStream);
-	void TestAlgorithm(Path* algorithm(AdjacencyMatrix*, int), std::ostream& fileStream, std::ostream& consoleStream, int repetitions);
+	void TestAlgorithm(AlgorithmResultContainer* algorithm(AdjacencyMatrix*, int), std::ostream& fileStream, std::ostream& consoleStream, int repetitions);
 };
 
