@@ -114,7 +114,7 @@ int TS_DynamicProgramming::DynamicProgramming_D(AdjacencyMatrix* matrix, DP_Comb
 	return foundMinValue;
 }
 
-Path* TS_DynamicProgramming::UseDynamicProgramming(AdjacencyMatrix* matrix, int startingPoint, int endPoint, bool verbose)
+Path* TS_DynamicProgramming::UseDynamicProgramming(AdjacencyMatrix* matrix, int startingPoint, bool verbose)
 {
 	const unsigned long long int possibleVerticesCombinations = (int)pow(2, matrix->GetSize());
 	DP_CombinationInfo** calculatedValues = new DP_CombinationInfo * [possibleVerticesCombinations + 1];
@@ -158,7 +158,7 @@ Path* TS_DynamicProgramming::UseDynamicProgramming(AdjacencyMatrix* matrix, int 
 	for (int pointIndex = 0; pointIndex < matrix->GetSize(); pointIndex++) {
 		combination.push_back(pointIndex);
 	}
-	int minValue = DynamicProgramming_D(matrix, calculatedValues, startingPoint, endPoint, endPoint, verbose, combination);
+	int minValue = DynamicProgramming_D(matrix, calculatedValues, startingPoint, startingPoint, startingPoint, verbose, combination);
 
 	if (verbose) {
 		std::cout << "minValue:" << minValue << std::endl;
@@ -171,7 +171,7 @@ Path* TS_DynamicProgramming::UseDynamicProgramming(AdjacencyMatrix* matrix, int 
 	  * Generowanie œcie¿ki
 	  **/
 	Path* path = new Path(matrix);
-	int edgeBegin = endPoint;
+	int edgeBegin = startingPoint;
 	int edgeEnd = -1;
 	unsigned long long int storageIndexPath = ((unsigned long long int)1 << matrix->GetSize()) - 1;
 	for (int a = 0; a < matrix->GetSize(); a++) {
