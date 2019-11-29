@@ -9,15 +9,19 @@ Path* TS_BruteForce::UseBruteForce(AdjacencyMatrix* matrix, int startingPoint, i
 
 	Path* bestPath = new Path(matrix);
 
-	SearchTree(matrix, tempPath, &bestValue, bestPath, startingPoint, endPoint);
+	SearchTree(matrix, tempPath, &bestValue, bestPath, startingPoint);
 
 	return bestPath;
 }
 
-void TS_BruteForce::SearchTree(AdjacencyMatrix* matrix, Path* currentlyCheckedPath, int* bestValue, Path* bestPath, int startPoint, int endPoint)
+void TS_BruteForce::SearchTree(AdjacencyMatrix* matrix,
+	Path* currentlyCheckedPath,
+	int* bestValue,
+	Path* bestPath,
+	int startPoint)
 {
 	if (currentlyCheckedPath->GetNumberOfNodes() == matrix->GetSize()) {
-		currentlyCheckedPath->InsertNodeAtTheEnd(endPoint);
+		currentlyCheckedPath->InsertNodeAtTheEnd(startPoint);
 		int result = currentlyCheckedPath->CalculateCost();
 
 		if (*bestValue == -1 || result < *bestValue) {
@@ -29,12 +33,12 @@ void TS_BruteForce::SearchTree(AdjacencyMatrix* matrix, Path* currentlyCheckedPa
 	}
 
 	for (int a = 0; a < matrix->GetSize(); a++) {
-		if (a == startPoint || a == endPoint) {
+		if (a == startPoint) {
 			continue;
 		}
 		if (currentlyCheckedPath->ValueCanBeConnectedToEnd(a)) {
 			currentlyCheckedPath->InsertNodeAtTheEnd(a);
-			SearchTree(matrix, currentlyCheckedPath, bestValue, bestPath, startPoint, endPoint);
+			SearchTree(matrix, currentlyCheckedPath, bestValue, bestPath, startPoint);
 			currentlyCheckedPath->RemoveLastEdge();
 		}
 	}

@@ -13,8 +13,6 @@ AlgorithmResultContainer* TS_BranchAndBound::UseBranchAndBound(AdjacencyMatrix* 
 
 	SearchTree(matrix, tempPath, bestPath, startingPoint, &globalBestCost);
 
-	//bestPath->Reverse();
-
 	return new AlgorithmResultContainer(bestPath, -1);
 }
 
@@ -61,7 +59,11 @@ int TS_BranchAndBound::LowerBound(AdjacencyMatrix* matrix, Path* currentlyChecke
 	return sumOfLowerBound;
 }
 
-void TS_BranchAndBound::SearchTree(AdjacencyMatrix* matrix, Path* currentlyCheckedPath, Path* bestPath, int startAndEndPoint, int* globalUpperBound)
+void TS_BranchAndBound::SearchTree(AdjacencyMatrix* matrix,
+	Path* currentlyCheckedPath,
+	Path* bestPath,
+	int startAndEndPoint,
+	int* globalUpperBound)
 {
 	if (currentlyCheckedPath->GetNumberOfNodes() == matrix->GetSize()) {
 		currentlyCheckedPath->InsertNodeAtTheEnd(startAndEndPoint);
