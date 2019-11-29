@@ -163,6 +163,7 @@
     <ClCompile Include="TS_BranchAndBound.cpp" />
     <ClCompile Include="TS_BruteForce.cpp" />
     <ClCompile Include="TS_DynamicProgramming.cpp" />
+    <ClCompile Include="TS_SimulatedAnnealing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdjacencyMatrix.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="TS_BranchAndBound.h" />
     <ClInclude Include="TS_BruteForce.h" />
     <ClInclude Include="TS_DynamicProgramming.h" />
+    <ClInclude Include="TS_SimulatedAnnealing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

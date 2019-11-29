@@ -136,6 +136,55 @@ void Path::ReplaceWithOtherInstance(const Path& otherInstance)
 	this->baseMatrix = otherInstance.baseMatrix;
 }
 
+void Path::SwapNodes(int positionInPath1, int positionInPath2)
+{
+	if (positionInPath1 >= baseMatrix->GetSize() || positionInPath2 >= baseMatrix->GetSize()) {
+		throw new std::exception("Incorrect path positions");
+	}
+
+	int firstNodeIndex = 0;
+	int secondNodeIndex = 0;
+	if (positionInPath1 == 0) {
+		firstNodeIndex = startingPoint;
+	}
+	else if (positionInPath1 == baseMatrix->GetSize() - 1) {
+		firstNodeIndex = GetLastNode();
+	}
+	else {
+		firstNodeIndex = path[positionInPath1 - 1].to;
+	}
+	if (positionInPath2 == 0) {
+		secondNodeIndex = startingPoint;
+	}
+	else if (positionInPath2 == baseMatrix->GetSize() - 1) {
+		secondNodeIndex = GetLastNode();
+	}
+	else {
+		secondNodeIndex = path[positionInPath2 - 1].to;
+	}
+
+	ReplaceNode(positionInPath1, secondNodeIndex);
+	ReplaceNode(positionInPath2, firstNodeIndex);
+}
+
+void Path::ReplaceNode(int position, int value)
+{
+	if (position == 0 || position == path.size() - 1) {
+		startingPoint = value;
+		path[0].from = value;
+		path[path.size() - 1].to = value;
+	}
+	else {
+		path[position - 1].to = value;
+		path[position].from = value;
+	}
+}
+
+void Path::GenerateRandom()
+{
+	GenerateRandom(this->baseMatrix->GetSize());
+}
+
 void Path::GenerateRandom(int size)
 {
 	path.clear();
@@ -159,6 +208,7 @@ void Path::GenerateRandom(int size)
 
 		if (firstIndex == -1) {
 			firstIndex = currentNodeIndex;
+			startingPoint = firstIndex;
 		}
 
 		if (prevNodeIndex != -1) {
@@ -184,4 +234,12 @@ void Path::Display(std::ostream& stream)
 		stream << path[a].from << "->" << path[a].to << "(" << this->baseMatrix->GetWeightOfEdge(path[a].from, path[a].to) << ") ";
 	}
 	stream << "Koszt: " << CalculateCost() << std::endl;
+}
+
+void Path::DisplayCompact(std::ostream& stream)
+{
+	for (int a = 0; a < path.size(); a++) {
+		stream << path[a].from << "->" << path[a].to << "(" << this->baseMatrix->GetWeightOfEdge(path[a].from, path[a].to) << ") ";
+	}
+	stream << "Koszt: " << CalculateCost();
 }

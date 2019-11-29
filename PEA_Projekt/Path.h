@@ -50,7 +50,12 @@ public:
 
 	void ReplaceWithOtherInstance(const Path& otherInstance);
 
+	void SwapNodes(int i1, int i2);
+	void ReplaceNode(int position, int value);
+
+	void GenerateRandom();
 	void GenerateRandom(int size);
 	void Display(std::ostream& stream);
+	void DisplayCompact(std::ostream& stream);
 };
 
