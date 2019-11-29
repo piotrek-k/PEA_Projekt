@@ -8,10 +8,10 @@ public:
 	enum class changeTypes {swap};
 	static AlgorithmResultContainer* UseSimulatedAnnealing(
 		AdjacencyMatrix* matrix, 
-		float t0,
-		float tmin, 
-		float T_change_param1,
-		float T_change_param2,
+		double t0,
+		double tmin,
+		double T_change_param1,
+		double T_change_param2,
 		int maxNumOfIterations, 
 		tempDropFunctions tempDropType, 
 		changeTypes changeType , 

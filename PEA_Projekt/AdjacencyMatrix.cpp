@@ -132,6 +132,18 @@ void AdjacencyMatrix::Display(std::ostream& output)
 	}
 }
 
+void AdjacencyMatrix::DisplayDetails(std::ostream& output)
+{
+	std::tuple<double, double, double, double> result = AvgAndVarianceOfAll();
+	double avgAvg = std::get<0>(result);
+	double avgVar = std::get<1>(result);
+	output << "Average: " << avgAvg << std::endl <<
+		" Avg variance: " << avgVar << std::endl <<
+		" Avg overall distance: " << std::get<2>(result) << std::endl <<
+		" Expected deviation: " << std::get<3>(result) <<
+		std::endl;
+}
+
 int AdjacencyMatrix::GetWeightOfEdge(int from, int to)
 {
 	return matrix[from][to]->weight;
@@ -140,4 +152,45 @@ int AdjacencyMatrix::GetWeightOfEdge(int from, int to)
 int AdjacencyMatrix::GetSize()
 {
 	return this->size;
+}
+
+std::tuple<double, double> AdjacencyMatrix::AvgAndVarianceOfNode(int nodeIndex)
+{
+	int sumOfWeights = 0;
+	int sumOfElems = 0;
+	for (int i = 0; i < size; i++) {
+		if (i == nodeIndex) continue;
+		sumOfWeights += matrix[nodeIndex][i]->weight;
+		sumOfElems++;
+	}
+	double average = (double) sumOfWeights / (double)sumOfElems;
+
+	double sumOfDeviations = 0;
+	int numOfDeviations = 0;
+	for (int i = 0; i < size; i++) {
+		if (i == nodeIndex) continue;
+		sumOfDeviations += pow(matrix[nodeIndex][i]->weight - average, 2);
+		numOfDeviations++;
+	}
+	double variance = (double)sumOfDeviations / (double)numOfDeviations;
+
+	return std::tuple<double, double>(average, variance);
+}
+
+std::tuple<double, double, double, double> AdjacencyMatrix::AvgAndVarianceOfAll()
+{
+	double avgAvgSum = 0;
+	double avgVarSum = 0;
+	double avgDeviation = 0;
+	for (int i = 0; i < size; i++) {
+		std::tuple<double, double> result = AvgAndVarianceOfNode(i);
+		avgAvgSum += std::get<0>(result);
+		avgVarSum += std::get<1>(result);
+		avgDeviation += sqrt(std::get<1>(result));
+	}
+	return std::tuple<double, double, double, double>(
+		avgAvgSum/(double)size, 
+		avgVarSum/(double)size, 
+		avgAvgSum / (double)size * (size-1),
+		avgDeviation / (double)size);
 }

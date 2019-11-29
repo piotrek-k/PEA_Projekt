@@ -5,10 +5,10 @@
 
 AlgorithmResultContainer* TS_SimulatedAnnealing::UseSimulatedAnnealing(
 	AdjacencyMatrix* matrix,
-	float T_0,
-	float T_min,
-	float T_change_param1,
-	float T_change_param2,
+	double T_0,
+	double T_min,
+	double T_change_param1,
+	double T_change_param2,
 	int maxNumOfIterations,
 	tempDropFunctions tempDropType,
 	changeTypes changeType,
@@ -20,7 +20,7 @@ AlgorithmResultContainer* TS_SimulatedAnnealing::UseSimulatedAnnealing(
 	currentPath->GenerateRandom();
 	Path* bestPath = new Path(matrix);
 	bestPath->ReplaceWithOtherInstance(*currentPath);
-	float T = T_0;
+	double T = T_0;
 	int iterLeft = maxNumOfIterations; // iterations left
 	int revokedCount = 0;
 	int worseOptionAcceptedCount = 0;
@@ -30,11 +30,15 @@ AlgorithmResultContainer* TS_SimulatedAnnealing::UseSimulatedAnnealing(
 		currentPath->ReplaceWithOtherInstance(*bestPath);
 		currentPath->SwapNodes(rand() % matrix->GetSize(), rand() % matrix->GetSize());
 		if (verbose) {
-			currentPath->Display(std::cout);
+			currentPath->DisplayCompact(std::cout);
 			std::cout << " T:" << T << " ";
 		}
 
-		int costDiff = currentPath->CalculateCost() - bestPath->CalculateCost();
+		double costDiff = currentPath->CalculateCost() - bestPath->CalculateCost();
+
+		if (verbose) {
+			std::cout << " costDiff " << costDiff;
+		}
 
 		if (costDiff < 0) {
 			bestPath->ReplaceWithOtherInstance(*currentPath);

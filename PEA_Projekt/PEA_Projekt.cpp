@@ -17,34 +17,44 @@ int main(int argc, char** argv)
 {
 	AdjacencyMatrix* lastAM = new AdjacencyMatrix();
 
-	if (std::string(argv[1]) == "SA") {
-		std::string fileName = std::string(argv[2]);
-		float param1 = atof(argv[3]);
-		float param2 = atof(argv[4]);
-		int tempDrop = atoi(argv[5]);
-		lastAM = new AdjacencyMatrix(fileName);
-		//lastAM->Display(std::cout);
-
-		if (lastAM != NULL) {
-			//TimeCounter* timeCounter = new TimeCounter();
-			//timeCounter->ResetCounter();
-			//timeCounter->StartNextMeasurement();
-			AlgorithmResultContainer* result = TS_SimulatedAnnealing::UseSimulatedAnnealing(
-				lastAM,
-				100,
-				1,
-				param1,
-				param2,
-				500,
-				TS_SimulatedAnnealing::tempDropFunctions(tempDrop),
-				TS_SimulatedAnnealing::changeTypes::swap,
-				false);
-			//timeCounter->EndSingleMeasurement();
-			//std::cout << "Czas wykonania algorytmu: " << timeCounter->Summarize() << "ms" << std::endl;
-			result->path->Display(std::cout);
+	if (argc > 1 && std::string(argv[1]) == "SA") {
+		if (argc < 10) {
+			std::cout << "algortihm filename param1 param2 tempdroptype tstart tmin max_iterations verb" << std::endl;
 		}
 		else {
-			std::cout << "lastAM null" << std::endl;
+			std::string fileName = std::string(argv[2]);
+			float param1 = atof(argv[3]);
+			float param2 = atof(argv[4]);
+			int tempDrop = atoi(argv[5]);
+			int tstart = atoi(argv[6]);
+			int tmin = atoi(argv[7]);
+			int max_iterations = atoi(argv[8]);
+			int verbose = atoi(argv[9]);
+			lastAM = new AdjacencyMatrix(fileName);
+			//lastAM->Display(std::cout);
+			lastAM->DisplayDetails(std::cout);
+
+			if (lastAM != NULL) {
+				//TimeCounter* timeCounter = new TimeCounter();
+				//timeCounter->ResetCounter();
+				//timeCounter->StartNextMeasurement();
+				AlgorithmResultContainer* result = TS_SimulatedAnnealing::UseSimulatedAnnealing(
+					lastAM,
+					tstart,
+					tmin,
+					param1,
+					param2,
+					max_iterations,
+					TS_SimulatedAnnealing::tempDropFunctions(tempDrop),
+					TS_SimulatedAnnealing::changeTypes::swap,
+					verbose);
+				//timeCounter->EndSingleMeasurement();
+				//std::cout << "Czas wykonania algorytmu: " << timeCounter->Summarize() << "ms" << std::endl;
+				result->path->Display(std::cout);
+			}
+			else {
+				std::cout << "lastAM null" << std::endl;
+			}
 		}
 	}
 	else {
@@ -78,6 +88,7 @@ int main(int argc, char** argv)
 
 				lastAM = new AdjacencyMatrix(fileName);
 				lastAM->Display(std::cout);
+				lastAM->DisplayDetails(std::cout);
 			}
 			break;
 			case 2:
