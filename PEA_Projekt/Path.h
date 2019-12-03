@@ -55,6 +55,7 @@ public:
 
 	void GenerateRandom();
 	void GenerateRandom(int size);
+	void GenerateGreedySolution(int greedyStartPoint);
 	void Display(std::ostream& stream);
 	void DisplayCompact(std::ostream& stream);
 };

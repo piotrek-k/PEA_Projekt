@@ -76,6 +76,7 @@ int main(int argc, char** argv)
 			std::cout << "8. Branch & Bound" << std::endl;
 			std::cout << "9. Pomiary dla etapu 1." << std::endl;
 			std::cout << "10. Wyzarzanie" << std::endl;
+			std::cout << "11. Funkcja celu: greedy solution" << std::endl;
 
 			std::cin >> action;
 
@@ -236,6 +237,13 @@ int main(int argc, char** argv)
 				else {
 					std::cout << "lastAM null" << std::endl;
 				}
+			}
+			break;
+			case 11:
+			{
+				Path* path = new Path(lastAM);
+				path->GenerateGreedySolution(1);
+				path->Display(std::cout);
 			}
 			break;
 			}

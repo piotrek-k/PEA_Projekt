@@ -227,6 +227,40 @@ void Path::GenerateRandom(int size)
 	);
 }
 
+void Path::GenerateGreedySolution(int greedyStartPoint)
+{
+	path.clear();
+	srand(time(NULL));
+
+	std::vector<int> tempVec;
+	for (int a = 0; a < this->baseMatrix->GetSize(); a++) {
+		tempVec.push_back(a);
+	}
+
+	int prevNodeIndex = greedyStartPoint;
+	for (int x = 0; x < this->baseMatrix->GetSize()-1; x++) {
+		int minimalStepCost = INT_MAX;
+		int minimalStepIndex = -1;
+		for (int tV = 0; tV < tempVec.size(); tV++) {
+			int stepConstCandidate = this->baseMatrix->GetWeightOfEdge(prevNodeIndex, tempVec[tV]);
+			if (minimalStepCost > stepConstCandidate) {
+				minimalStepCost = stepConstCandidate;
+				minimalStepIndex = tempVec[tV];
+			}
+		}
+
+		if (minimalStepIndex != -1) {
+			tempVec.erase(tempVec.begin() + minimalStepIndex);
+			path.push_back(PathEdge(prevNodeIndex, minimalStepIndex));
+
+			prevNodeIndex = minimalStepIndex;
+		}
+		else {
+			throw std::exception("Nie znaleziono minimalnego kroku.");
+		}
+	}
+}
+
 void Path::Display(std::ostream& stream)
 {
 	stream << "Wygenerowana sciezka: " << std::endl;
