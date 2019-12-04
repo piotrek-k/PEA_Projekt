@@ -12,6 +12,7 @@
 #include "TS_SimulatedAnnealing.h"
 #include "TimeCounter.h"
 #include "BulkDataTester.h"
+#include "TS_TabuSearch.h"
 
 int main(int argc, char** argv)
 {
@@ -51,6 +52,28 @@ int main(int argc, char** argv)
 				//timeCounter->EndSingleMeasurement();
 				//std::cout << "Czas wykonania algorytmu: " << timeCounter->Summarize() << "ms" << std::endl;
 				result->path->Display(std::cout);
+			}
+			else {
+				std::cout << "lastAM null" << std::endl;
+			}
+		}
+	}
+	else if (argc > 1 && std::string(argv[1]) == "TS") {
+		if (argc < 5) {
+			std::cout << "algortihm filename maxIter tabuListSize" << std::endl;
+		}
+		else {
+			std::string fileName = std::string(argv[2]);
+			int maxIter = atoi(argv[3]);
+			int tabuListSize = atoi(argv[4]);
+
+			lastAM = new AdjacencyMatrix(fileName);
+			//lastAM->Display(std::cout);
+			lastAM->DisplayDetails(std::cout);
+
+			if (lastAM != NULL) {
+				Path* result = TS_TabuSearch::TS_UseTabuSearch(lastAM, maxIter, tabuListSize, true);
+				result->Display(std::cout);
 			}
 			else {
 				std::cout << "lastAM null" << std::endl;
