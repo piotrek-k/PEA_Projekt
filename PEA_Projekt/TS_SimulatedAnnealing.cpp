@@ -71,13 +71,13 @@ AlgorithmResultContainer* TS_SimulatedAnnealing::UseSimulatedAnnealing(
 		coolingCount++;
 		switch (tempDropType)
 		{
-		case tempDropFunctions::geometric:
+		case tempDropFunctions::geometric: // 1 
 			T = T * pow(T_change_param1, -coolingCount);
 			break;
-		case tempDropFunctions::logarythmic:
-			T = T_change_param1 / log(coolingCount + T_change_param2);
+		case tempDropFunctions::logarythmic: // 2
+			T = T * T_change_param1 / log10(coolingCount + T_change_param2);
 			break;
-		case tempDropFunctions::linear:
+		case tempDropFunctions::linear: // 0
 		default:
 			T = T * T_change_param1;
 			break;

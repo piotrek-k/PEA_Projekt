@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 			int verbose = atoi(argv[9]);
 			lastAM = new AdjacencyMatrix(fileName);
 			//lastAM->Display(std::cout);
-			lastAM->DisplayDetails(std::cout);
+			//lastAM->DisplayDetails(std::cout);
 
 			if (lastAM != NULL) {
 				//TimeCounter* timeCounter = new TimeCounter();
@@ -59,20 +59,21 @@ int main(int argc, char** argv)
 		}
 	}
 	else if (argc > 1 && std::string(argv[1]) == "TS") {
-		if (argc < 5) {
-			std::cout << "algortihm filename maxIter tabuListSize" << std::endl;
+		if (argc < 6) {
+			std::cout << "algortihm filename maxIter tabuListSize verbose" << std::endl;
 		}
 		else {
 			std::string fileName = std::string(argv[2]);
 			int maxIter = atoi(argv[3]);
 			int tabuListSize = atoi(argv[4]);
+			int verbose = atoi(argv[5]);
 
 			lastAM = new AdjacencyMatrix(fileName);
 			//lastAM->Display(std::cout);
-			lastAM->DisplayDetails(std::cout);
+			//lastAM->DisplayDetails(std::cout);
 
 			if (lastAM != NULL) {
-				Path* result = TS_TabuSearch::TS_UseTabuSearch(lastAM, maxIter, tabuListSize, true);
+				Path* result = TS_TabuSearch::TS_UseTabuSearch(lastAM, maxIter, tabuListSize, verbose);
 				result->Display(std::cout);
 			}
 			else {
