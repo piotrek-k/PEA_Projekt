@@ -1,14 +1,20 @@
 #include "pch.h"
-#include "../PEA_Projekt/Path.h"
-#include "../PEA_Projekt/PathEdge.h"
 #include "../PEA_Projekt/AdjacencyMatrix.h"
+#include "../PEA_Projekt/Path.h"
+
+#include <string>
+#include <windows.h>
+
+using namespace std;
+
 TEST(TestCaseName, TestName) {
   EXPECT_EQ(1, 1);
   EXPECT_TRUE(true);
 }
 
 TEST(test_Path, PathCanBeLoaded) {
-	AdjacencyMatrix* am = new AdjacencyMatrix("./dane.txt");
+
+	AdjacencyMatrix* am = new AdjacencyMatrix(".\\Data\\SMALL\\data11.txt");
 	Path* path = new Path(am);
 
 	EXPECT_TRUE(am->GetSize() > 0);

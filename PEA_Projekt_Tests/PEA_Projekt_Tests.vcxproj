@@ -45,12 +45,15 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PEA_Projekt\PEA_Projekt.vcxproj">
-      <Project>{09d9ab8b-6a56-40c6-aa5c-784da4deb26f}</Project>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PEA_Projekt_StaticLib\PEA_Projekt_StaticLib.vcxproj">
+      <Project>{b4ccf79e-7e3c-4cb5-be49-e66f8db84f7b}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Text Include="dane.txt" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
