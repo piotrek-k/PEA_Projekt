@@ -12,7 +12,7 @@ AlgorithmResultContainer* TS_SimulatedAnnealing::UseSimulatedAnnealing(
 	int maxNumOfIterations,
 	tempDropFunctions tempDropType,
 	changeTypes changeType,
-	bool verbose)
+	int verbose)
 {
 	srand(time(NULL));
 
@@ -29,39 +29,39 @@ AlgorithmResultContainer* TS_SimulatedAnnealing::UseSimulatedAnnealing(
 	while (T > T_min&& iterLeft > 0) {
 		currentPath->ReplaceWithOtherInstance(*bestPath);
 		currentPath->SwapNodes(rand() % matrix->GetSize(), rand() % matrix->GetSize());
-		if (verbose) {
+		if (verbose > 1) {
 			currentPath->DisplayCompact(std::cout);
 			std::cout << " T:" << T << " ";
 		}
 
 		double costDiff = currentPath->CalculateCost() - bestPath->CalculateCost();
 
-		if (verbose) {
+		if (verbose > 1) {
 			std::cout << " costDiff " << costDiff;
 		}
 
 		if (costDiff < 0) {
 			bestPath->ReplaceWithOtherInstance(*currentPath);
-			if (verbose) {
+			if (verbose > 1) {
 				std::cout << " accepted ";
 			}
 		}
 		else {
 			double changeProbability = exp(-(double)costDiff / (double)T);
-			if (verbose) {
+			if (verbose > 1) {
 				std::cout << " probab:" << changeProbability << " ";
 			}
 			double randomValue = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 			if (randomValue <= changeProbability) {
 				bestPath->ReplaceWithOtherInstance(*currentPath);
 				worseOptionAcceptedCount++;
-				if (verbose) {
+				if (verbose > 1) {
 					std::cout << " accepted ";
 				}
 			}
 			else {
 				revokedCount++;
-				if (verbose) {
+				if (verbose > 1) {
 					std::cout << " revoked ";
 				}
 			}
@@ -83,14 +83,16 @@ AlgorithmResultContainer* TS_SimulatedAnnealing::UseSimulatedAnnealing(
 			break;
 		}
 
-		if (verbose) {
+		if (verbose > 1) {
 			std::cout << std::endl;
 		}
 	}
 
-	std::cout << "Iterations: " << maxNumOfIterations - iterLeft << std::endl;
-	std::cout << "Number of revoked proposals: " << revokedCount << std::endl;
-	std::cout << "Number of accepted worse options: " << worseOptionAcceptedCount << std::endl;
+	if (verbose == 1) {
+		std::cout << "Iterations: " << maxNumOfIterations - iterLeft << std::endl;
+		std::cout << "Number of revoked worse proposals: " << revokedCount << std::endl;
+		std::cout << "Number of accepted worse options: " << worseOptionAcceptedCount << std::endl;
+	}
 
 	return new AlgorithmResultContainer(bestPath, -1);
 }

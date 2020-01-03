@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Path* TS_TabuSearch::TS_UseTabuSearch(AdjacencyMatrix* matrix, int maxIterations, int tabuListSize, bool verbose)
+Path* TS_TabuSearch::TS_UseTabuSearch(AdjacencyMatrix* matrix, int maxIterations, int tabuListSize, int verbose)
 {
 	Path* bestPath = new Path(matrix);
 	bestPath->GenerateGreedySolution(1);
@@ -13,13 +13,13 @@ Path* TS_TabuSearch::TS_UseTabuSearch(AdjacencyMatrix* matrix, int maxIterations
 
 	for (int iterationsCount = 0; iterationsCount < maxIterations; iterationsCount++) {
 
-		//if (verbose) {
+		//if (verbose > 1) {
 		//	cout << "iteration " << iterationsCount << endl;
 		//}
 
 		int currentPathCost = currentPath->CalculateCost();
 
-		/*if (verbose) {
+		/*if (verbose > 1) {
 			cout << "currentPath: " << endl;
 			currentPath->DisplayCompact(cout);
 			cout << endl;
@@ -64,7 +64,7 @@ Path* TS_TabuSearch::TS_UseTabuSearch(AdjacencyMatrix* matrix, int maxIterations
 			}
 		}
 
-		if (verbose) {
+		if (verbose > 1) {
 			cout << "Najlepszy sasiad: (" <<
 				get<0>(bestNeighbour_tabuListEntry) << ", " <<
 				get<1>(bestNeighbour_tabuListEntry) << ")" << endl;
@@ -79,7 +79,7 @@ Path* TS_TabuSearch::TS_UseTabuSearch(AdjacencyMatrix* matrix, int maxIterations
 		 */
 		if (bestNeighbourCost < bestPath->CalculateCost()) {
 			bestPath->ReplaceWithOtherInstance(*bestNeighbour);
-			if (verbose) {
+			if (verbose > 1) {
 				cout << "Sasiad ma wartosc optymalna" << endl;
 			}
 		}

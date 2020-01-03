@@ -18,9 +18,11 @@ int main(int argc, char** argv)
 {
 	AdjacencyMatrix* lastAM = new AdjacencyMatrix();
 
+	//std::cout << argv[0] << " " << argv[1] << " " << argv[2] << std::endl;
+
 	if (argc > 1 && std::string(argv[1]) == "SA") {
-		if (argc < 10) {
-			std::cout << "algortihm filename param1 param2 tempdroptype tstart tmin max_iterations verb" << std::endl;
+		if (argc < 11) {
+			std::cout << "algortihm filename param1 param2 tempdroptype tstart tmin max_iterations verb repetitions" << std::endl;
 		}
 		else {
 			std::string fileName = std::string(argv[2]);
@@ -31,27 +33,44 @@ int main(int argc, char** argv)
 			int tmin = atoi(argv[7]);
 			int max_iterations = atoi(argv[8]);
 			int verbose = atoi(argv[9]);
+			int repetitions = atoi(argv[10]);
 			lastAM = new AdjacencyMatrix(fileName);
 			//lastAM->Display(std::cout);
 			//lastAM->DisplayDetails(std::cout);
 
 			if (lastAM != NULL) {
+				//std::cout << "lastam..." << lastAM->GetSize() << std::endl;
 				//TimeCounter* timeCounter = new TimeCounter();
 				//timeCounter->ResetCounter();
 				//timeCounter->StartNextMeasurement();
-				AlgorithmResultContainer* result = TS_SimulatedAnnealing::UseSimulatedAnnealing(
-					lastAM,
-					tstart,
-					tmin,
-					param1,
-					param2,
-					max_iterations,
-					TS_SimulatedAnnealing::tempDropFunctions(tempDrop),
-					TS_SimulatedAnnealing::changeTypes::swap,
-					verbose);
+				int sum = 0;
+				for (int a = 0; a < repetitions; a++) {
+					AlgorithmResultContainer* result = TS_SimulatedAnnealing::UseSimulatedAnnealing(
+						lastAM,
+						tstart,
+						tmin,
+						param1,
+						param2,
+						max_iterations,
+						TS_SimulatedAnnealing::tempDropFunctions(tempDrop),
+						TS_SimulatedAnnealing::changeTypes::swap,
+						verbose);
+					sum += result->path->CalculateCost();
+					if (verbose > 0) {
+						result->path->DisplayCompact(std::cout);
+						std::cout << std::endl;
+					}
+				}
 				//timeCounter->EndSingleMeasurement();
 				//std::cout << "Czas wykonania algorytmu: " << timeCounter->Summarize() << "ms" << std::endl;
-				result->path->Display(std::cout);
+				//result->path->Display(std::cout);
+				double average = sum / (double)repetitions;
+
+				if (verbose > 0) {
+					std::cout << "Sredni wynik z " << repetitions << " wykonan: ";
+				}
+				std::cout << average << std::endl;
+
 			}
 			else {
 				std::cout << "lastAM null" << std::endl;
@@ -74,7 +93,12 @@ int main(int argc, char** argv)
 
 			if (lastAM != NULL) {
 				Path* result = TS_TabuSearch::TS_UseTabuSearch(lastAM, maxIter, tabuListSize, verbose);
-				result->Display(std::cout);
+				if (verbose > 0) {
+					result->Display(std::cout);
+				}
+				else {
+					std::cout << result->CalculateCost() << std::endl;
+				}
 			}
 			else {
 				std::cout << "lastAM null" << std::endl;

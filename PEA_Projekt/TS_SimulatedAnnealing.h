@@ -15,7 +15,7 @@ public:
 		int maxNumOfIterations, 
 		tempDropFunctions tempDropType, 
 		changeTypes changeType , 
-		bool verbose = false);
+		int verbose = 0);
 
 private:
 	static void swapElementsInPath(Path* path);
