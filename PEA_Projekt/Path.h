@@ -58,5 +58,13 @@ public:
 	void GenerateGreedySolution(int greedyStartPoint);
 	void Display(std::ostream& stream);
 	void DisplayCompact(std::ostream& stream);
+	/// <summary>
+	/// 1. Sprawdü poprawnoúÊ startingPoint
+	/// 2. Sprawdü czy wÍz≥y nie powtarzajπ siÍ 
+	/// 3. Sprawdü czy wartoúci from odpowiadajπ wartoúciom to
+	/// 4. Sprawdü czy ostatni element to startingPoint
+	/// </summary>
+	/// <returns></returns>
+	bool Validate();
 };
 

@@ -286,3 +286,40 @@ void Path::DisplayCompact(std::ostream& stream)
 	}
 	stream << "Koszt: " << CalculateCost();
 }
+
+bool Path::Validate()
+{
+	if (path.size() > 0) {
+		if (path[0].from != startingPoint) {
+			throw "Incorrect startngPoint";
+		}
+
+		std::vector<int> indexesAlreadyUsed = std::vector<int>();
+		int previousTo = -1;
+		for (int x = 0; x < this->path.size(); x++) {
+			bool indexUsed = false;
+			for (int v = 0; v < indexesAlreadyUsed.size(); v++) {
+				if (this->path[x].from == indexesAlreadyUsed[v]) {
+					indexUsed = true;
+				}
+			}
+			if (!indexUsed) {
+				indexesAlreadyUsed.push_back(this->path[x].from);
+			}
+			else {
+				throw "Duplicate 'from' index";
+			}
+
+			if (previousTo != -1 && this->path[x].from != previousTo) {
+				throw "Current 'from' index doesn't match previous 'to'";
+			}
+			previousTo = this->path[x].to;
+		}
+	}
+
+	if (path[path.size() - 1].to != startingPoint) {
+		throw "Path is not a cycle";
+	}
+
+	return true;
+}
