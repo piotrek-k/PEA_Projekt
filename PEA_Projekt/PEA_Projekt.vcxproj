@@ -163,6 +163,7 @@
     <ClCompile Include="TS_BranchAndBound.cpp" />
     <ClCompile Include="TS_BruteForce.cpp" />
     <ClCompile Include="TS_DynamicProgramming.cpp" />
+    <ClCompile Include="TS_Genetic.cpp" />
     <ClCompile Include="TS_SimulatedAnnealing.cpp" />
     <ClCompile Include="TS_TabuSearch.cpp" />
   </ItemGroup>
@@ -178,6 +179,7 @@
     <ClInclude Include="TS_BranchAndBound.h" />
     <ClInclude Include="TS_BruteForce.h" />
     <ClInclude Include="TS_DynamicProgramming.h" />
+    <ClInclude Include="TS_Genetic.h" />
     <ClInclude Include="TS_SimulatedAnnealing.h" />
     <ClInclude Include="TS_TabuSearch.h" />
   </ItemGroup>

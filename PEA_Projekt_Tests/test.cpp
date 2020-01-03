@@ -1,20 +1,19 @@
 #include "pch.h"
 #include "../PEA_Projekt/Path.h"
+#include "../PEA_Projekt/PathEdge.h"
+#include "../PEA_Projekt/AdjacencyMatrix.h"
 TEST(TestCaseName, TestName) {
   EXPECT_EQ(1, 1);
   EXPECT_TRUE(true);
 }
 
-//TEST(test_Path, ContainsValueReturnsTrueResult) {
-//	Path* path = new Path();
-//	path->InsertEdge(PathEdge(0, 5, 10));
-//	path->InsertEdge(PathEdge(5, 3, 8));
-//	path->InsertEdge(PathEdge(3, 4, 6));
-//
-//	EXPECT_TRUE(path->ContainsValue(5, 3));
-//	EXPECT_TRUE(path->ContainsValue(3, 4));
-//	EXPECT_FALSE(path->ContainsValue(3, 5));
-//}
+TEST(test_Path, PathCanBeLoaded) {
+	AdjacencyMatrix* am = new AdjacencyMatrix("./dane.txt");
+	Path* path = new Path(am);
+
+	EXPECT_TRUE(am->GetSize() > 0);
+}
+
 //
 //TEST(test_Path, ValueCanBeConnectedToEndWorksPropely) {
 //	Path* path = new Path();
