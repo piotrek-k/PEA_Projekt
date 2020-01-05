@@ -34,6 +34,20 @@ void TS_Genetic::makeSelection_rank()
 	population.erase(population.begin() + this->targetPopulationSize, population.end());
 }
 
+void TS_Genetic::randomlySwapMutatePopulation(float probability)
+{
+	srand(time(NULL));
+	for (int indiv = 0; indiv < population.size(); indiv++) {
+		for (int genePos = 0; genePos < population[indiv].GetPathLength()-1; genePos++) {
+			double x = ((double)rand() / (RAND_MAX));
+			if (probability <= x) {
+				population[indiv].SwapNodes(genePos, genePos + 1);
+				std::cout << "Random swap";
+			}
+		}
+	}
+}
+
 std::tuple<Path, Path> TS_Genetic::crossPaths_OX(Path* p1, Path* p2)
 {
 	srand(time(NULL));
