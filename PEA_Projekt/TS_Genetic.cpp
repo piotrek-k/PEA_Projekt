@@ -38,22 +38,23 @@ std::tuple<Path, Path> TS_Genetic::crossPaths_OX(Path* p1, Path* p2)
 {
 	srand(time(NULL));
 
+	// tworzenie nowych instancji
 	Path* newPath1 = new Path(p1->GetBaseMatrix());
 	newPath1->ReplaceWithOtherInstance(*p1);
 	Path* newPath2 = new Path(p1->GetBaseMatrix());
 	newPath2->ReplaceWithOtherInstance(*p2);
 
-	//int k1 = rand() % newPath1->GetPathLength() + 1;
-	//int k2 = rand() % (newPath1->GetPathLength() - k1 - 1) + k1;
-	int k1 = 2;
-	int k2 = 6;
+	// losowanie sekcji dopasowania
+	int k1 = rand() % newPath1->GetPathLength() + 1;
+	int k2 = rand() % (newPath1->GetPathLength() - k1 - 1) + k1;
 
-	vector<int> leftFromP = vector<int>(); // zawartoœæ œcie¿ki P bez sekcji dopasowania Q
-	vector<int> leftFromQ = vector<int>();
+	vector<int> leftFromP = vector<int>(); // zawartoœæ œcie¿ki P bez sekcji dopasowania Q zaczynaj¹c od pozycji k2
+	vector<int> leftFromQ = vector<int>(); // zawartoœæ œcie¿ki Q bez sekcji dopasowania P zaczynaj¹c od pozycji k2
 
 	if (newPath1->GetPathLength() != newPath2->GetPathLength())
 		throw "Sciezki musza byc rownej dlugosci";
 
+	// Tworzenie tablic leftFromP i leftFromQ
 	int x = k2;
 	while (true) {
 		int candidateP = newPath1->GetStartingNodeAt(x);
@@ -86,8 +87,8 @@ std::tuple<Path, Path> TS_Genetic::crossPaths_OX(Path* p1, Path* p2)
 		}
 	}
 
+	// Podmiana elementów niebêd¹cych w sekcji dopasowania
 	int leftPointsPos = 0;
-	// podmiana ostatnich
 	int z = k2;
 	while (true) {
 		if (z < k1 || z >= k2) {
@@ -104,12 +105,6 @@ std::tuple<Path, Path> TS_Genetic::crossPaths_OX(Path* p1, Path* p2)
 			break;
 		}
 	}
-	// podmiana pierwszych
-	/*for (int x = 0; x < k1; x++) {
-		newPath1->ReplaceNode(x, leftFromP[leftPointsPos]);
-		newPath2->ReplaceNode(x, leftFromQ[leftPointsPos]);
-		leftPointsPos++;
-	}*/
 
 	if (!newPath1->Validate() || !newPath2->Validate())
 		throw "Jedna ze sciezek jest nieprawidlowa";
