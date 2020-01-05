@@ -58,6 +58,11 @@ public:
 	void GenerateGreedySolution(int greedyStartPoint);
 	void Display(std::ostream& stream);
 	void DisplayCompact(std::ostream& stream);
+
+	int GetStartingNodeAt(int x);
+	int GetPathLength();
+	AdjacencyMatrix* GetBaseMatrix();
+
 	/// <summary>
 	/// 1. SprawdŸ poprawnoœæ startingPoint
 	/// 2. SprawdŸ czy wêz³y nie powtarzaj¹ siê 

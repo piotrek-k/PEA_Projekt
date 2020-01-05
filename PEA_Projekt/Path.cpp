@@ -169,7 +169,7 @@ void Path::SwapNodes(int positionInPath1, int positionInPath2)
 
 void Path::ReplaceNode(int position, int value)
 {
-	if (position == 0 || position == path.size() - 1) {
+	if (position == 0 || position == path.size()) { // - 1 !!!!
 		startingPoint = value;
 		path[0].from = value;
 		path[path.size() - 1].to = value;
@@ -287,11 +287,27 @@ void Path::DisplayCompact(std::ostream& stream)
 	stream << "Koszt: " << CalculateCost();
 }
 
+int Path::GetStartingNodeAt(int x)
+{
+	return path[x].from;
+}
+
+int Path::GetPathLength()
+{
+	return path.size();
+}
+
+AdjacencyMatrix* Path::GetBaseMatrix()
+{
+	return baseMatrix;
+}
+
 bool Path::Validate()
 {
 	if (path.size() > 0) {
 		if (path[0].from != startingPoint) {
-			throw "Incorrect startngPoint";
+			//throw "Incorrect startngPoint";
+			return false;
 		}
 
 		std::vector<int> indexesAlreadyUsed = std::vector<int>();
@@ -307,18 +323,21 @@ bool Path::Validate()
 				indexesAlreadyUsed.push_back(this->path[x].from);
 			}
 			else {
-				throw "Duplicate 'from' index";
+				//throw "Duplicate 'from' index";
+				return false;
 			}
 
 			if (previousTo != -1 && this->path[x].from != previousTo) {
-				throw "Current 'from' index doesn't match previous 'to'";
+				//throw "Current 'from' index doesn't match previous 'to'";
+				return false;
 			}
 			previousTo = this->path[x].to;
 		}
 	}
 
 	if (path[path.size() - 1].to != startingPoint) {
-		throw "Path is not a cycle";
+		//throw "Path is not a cycle";
+		return false;
 	}
 
 	return true;
