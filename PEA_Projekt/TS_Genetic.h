@@ -12,7 +12,7 @@ public:
 	enum class CrossingStrategy { OX };
 	static Path* TS_UseGenetic(
 		AdjacencyMatrix* matrix,
-		int maxIterations,
+		int maxIterations, int populationSize,
 		SelectionType selectionType,
 		CrossingStrategy crossingStrategy,
 		float mutationProbability,
@@ -42,7 +42,12 @@ private:
 	/// Usuwa z populacji najs³absze osobniki aby jej wielkoœæ by³a równa targetPopulationSize
 	/// </summary>
 	void makeSelection_rank();
-	
+	/// <summary>
+	/// Spoœród `populationToCross` osobników, dokonaj `numberOfCrosses` losowych krzy¿owañ.
+	/// </summary>
+	/// <param name="populationToCross"></param>
+	void newGeneration_crossBestRandomly(int populationToCross, int numberOfCrosses, CrossingStrategy crossingStrategy);
+
 	/// <summary>
 	/// Dla ka¿dego osobnika populacji, dla ka¿dego jego genu, z podanym prawdopodobieñstwem zamieñ (swap)
 	/// miejscami gen z jego nastêpnikiem.
@@ -50,6 +55,6 @@ private:
 	/// <param name="probability"></param>
 	void randomlySwapMutatePopulation(float probability);
 
-	
+	void sortPopulationByPathCost();
 };
 

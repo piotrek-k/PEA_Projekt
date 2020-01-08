@@ -23,6 +23,21 @@ Path generateCorrectPath(AdjacencyMatrix* am) {
 	return path;
 }
 
+
+TEST(TestPath, SwapDoesntBreakPath) {
+	AdjacencyMatrix* am = new AdjacencyMatrix(".\\Data\\SMALL\\data11.txt");
+
+	Path p = Path(am);
+	p.GenerateGreedySolution(0);
+	EXPECT_TRUE(p.Validate());
+
+	for (int x = 0; x < p.GetPathLength() - 1; x++) {
+		for (int y = x; y < p.GetPathLength() - 1; y++) {
+			p.SwapNodes(y, y + 1);
+			EXPECT_TRUE(p.Validate());
+		}
+	}
+}
 TEST(TestPath, ValidateValidates) {
 	AdjacencyMatrix* am = new AdjacencyMatrix(".\\Data\\SMALL\\data11.txt");
 

@@ -147,8 +147,9 @@ void Path::SwapNodes(int positionInPath1, int positionInPath2)
 	if (positionInPath1 == 0) {
 		firstNodeIndex = startingPoint;
 	}
-	else if (positionInPath1 == baseMatrix->GetSize() - 1) {
-		firstNodeIndex = GetLastNode();
+	else if (positionInPath1 == this->GetPathLength() - 1) {
+		//firstNodeIndex = GetLastNode();
+		firstNodeIndex = path[this->GetPathLength() - 1].from;
 	}
 	else {
 		firstNodeIndex = path[positionInPath1 - 1].to;
@@ -156,8 +157,9 @@ void Path::SwapNodes(int positionInPath1, int positionInPath2)
 	if (positionInPath2 == 0) {
 		secondNodeIndex = startingPoint;
 	}
-	else if (positionInPath2 == baseMatrix->GetSize() - 1) {
-		secondNodeIndex = GetLastNode();
+	else if (positionInPath2 == this->GetPathLength() - 1) {
+		//secondNodeIndex = GetLastNode();
+		secondNodeIndex = path[this->GetPathLength() - 1].from;
 	}
 	else {
 		secondNodeIndex = path[positionInPath2 - 1].to;
@@ -188,7 +190,8 @@ void Path::GenerateRandom()
 void Path::GenerateRandom(int size)
 {
 	path.clear();
-	srand(time(NULL));
+	//std::cout << "srand " << time(NULL) << std::endl;
+	//srand(time(NULL));
 
 	std::vector<int> tempVec;
 	for (int a = 0; a < size; a++) {

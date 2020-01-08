@@ -13,6 +13,7 @@
 #include "TimeCounter.h"
 #include "BulkDataTester.h"
 #include "TS_TabuSearch.h"
+#include "TS_Genetic.h"
 
 int main(int argc, char** argv)
 {
@@ -102,6 +103,29 @@ int main(int argc, char** argv)
 			}
 			else {
 				std::cout << "lastAM null" << std::endl;
+			}
+		}
+	}
+	else if (argc > 1 && std::string(argv[1]) == "GEN") {
+		if (argc < 6) {
+			std::cout << "algortihm filename maxIter targetPopulationSize verbose" << std::endl;
+		}
+		else {
+			std::string fileName = std::string(argv[2]);
+			int maxIter = atoi(argv[3]);
+			int targetPopulationSize = atoi(argv[4]);
+			int verbose = atoi(argv[5]);
+
+			lastAM = new AdjacencyMatrix(fileName);
+
+			if (lastAM != NULL) {
+				Path* result = TS_Genetic::TS_UseGenetic(
+					lastAM,
+					1000,
+					100,
+					TS_Genetic::SelectionType::rank,
+					TS_Genetic::CrossingStrategy::OX,
+					0.01, true);
 			}
 		}
 	}
