@@ -63,6 +63,9 @@
     <ClInclude Include="..\PEA_Projekt\TS_TabuSearch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TS_Ant_Colony.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -108,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\PEA_Projekt\TS_TabuSearch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TS_Ant_Colony.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
