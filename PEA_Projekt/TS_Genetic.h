@@ -16,6 +16,7 @@ public:
 		SelectionType selectionType,
 		CrossingStrategy crossingStrategy,
 		float mutationProbability,
+		int crossesPerGeneration,
 		int verbose);
 
 	/// <summary>

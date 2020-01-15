@@ -10,7 +10,7 @@ TS_Genetic::TS_Genetic(AdjacencyMatrix* baseMatrix, int targetPopulationSize)
 	this->targetPopulationSize = targetPopulationSize;
 }
 
-Path TS_Genetic::TS_UseGenetic(AdjacencyMatrix* matrix, int maxIterations, int populationSize, SelectionType selectionType, CrossingStrategy crossingStrategy, float mutationProbability, int verbose)
+Path TS_Genetic::TS_UseGenetic(AdjacencyMatrix* matrix, int maxIterations, int populationSize, SelectionType selectionType, CrossingStrategy crossingStrategy, float mutationProbability, int crossesPerGeneration, int verbose)
 {
 	TS_Genetic instance = TS_Genetic(matrix, populationSize);
 	instance.generateRandomPopulation();
@@ -19,7 +19,7 @@ Path TS_Genetic::TS_UseGenetic(AdjacencyMatrix* matrix, int maxIterations, int p
 		// wygeneruj losowe mutacje
 		instance.randomlySwapMutatePopulation(0.01);
 		// utwórz nowe osobniki
-		instance.newGeneration_crossBestRandomly(populationSize, 10, crossingStrategy);
+		instance.newGeneration_crossBestRandomly(populationSize, crossesPerGeneration, crossingStrategy);
 		// wybierz osobniki do nastêpej iteracji
 		switch (selectionType) {
 		case SelectionType::rank:
@@ -36,9 +36,7 @@ Path TS_Genetic::TS_UseGenetic(AdjacencyMatrix* matrix, int maxIterations, int p
 			std::cout << "Pokolenie "
 				<< i << ". Wynik: ";
 		}
-		/*instance.population[0].CalculateCost() << "..." <<
-		instance.population[1].CalculateCost() << "..." <<
-		instance.population[2].CalculateCost() << std::endl;*/
+
 		if (verbose) {
 			for (int q = 0; q < populationSize; q++) {
 				std::cout << instance.population[q].CalculateCost() << "...";

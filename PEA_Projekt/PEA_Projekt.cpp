@@ -107,14 +107,16 @@ int main(int argc, char** argv)
 		}
 	}
 	else if (argc > 1 && std::string(argv[1]) == "GEN") {
-		if (argc < 6) {
-			std::cout << "algortihm filename maxIter targetPopulationSize verbose" << std::endl;
+		if (argc < 8) {
+			std::cout << "algortihm filename maxIter targetPopulationSize mutationProb crossesPerGeneration verbose" << std::endl;
 		}
 		else {
 			std::string fileName = std::string(argv[2]);
 			int maxIter = atoi(argv[3]);
 			int targetPopulationSize = atoi(argv[4]);
-			int verbose = atoi(argv[5]);
+			float mutationProbability = atof(argv[5]);
+			int crossesPerGeneration = atoi(argv[6]);
+			int verbose = atoi(argv[7]);
 
 			lastAM = new AdjacencyMatrix(fileName);
 
@@ -125,7 +127,9 @@ int main(int argc, char** argv)
 					targetPopulationSize,
 					TS_Genetic::SelectionType::rank,
 					TS_Genetic::CrossingStrategy::OX,
-					0.01, verbose);
+					mutationProbability, 
+					crossesPerGeneration, 
+					verbose);
 
 				std::cout << result.CalculateCost() << std::endl;
 			}
