@@ -119,13 +119,15 @@ int main(int argc, char** argv)
 			lastAM = new AdjacencyMatrix(fileName);
 
 			if (lastAM != NULL) {
-				Path* result = TS_Genetic::TS_UseGenetic(
+				Path result = TS_Genetic::TS_UseGenetic(
 					lastAM,
-					1000,
-					100,
+					maxIter,
+					targetPopulationSize,
 					TS_Genetic::SelectionType::rank,
 					TS_Genetic::CrossingStrategy::OX,
-					0.01, true);
+					0.01, verbose);
+
+				std::cout << result.CalculateCost() << std::endl;
 			}
 		}
 	}

@@ -10,7 +10,7 @@ public:
 
 	enum class SelectionType { rank };
 	enum class CrossingStrategy { OX };
-	static Path* TS_UseGenetic(
+	static Path TS_UseGenetic(
 		AdjacencyMatrix* matrix,
 		int maxIterations, int populationSize,
 		SelectionType selectionType,

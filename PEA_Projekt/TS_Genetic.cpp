@@ -10,7 +10,7 @@ TS_Genetic::TS_Genetic(AdjacencyMatrix* baseMatrix, int targetPopulationSize)
 	this->targetPopulationSize = targetPopulationSize;
 }
 
-Path* TS_Genetic::TS_UseGenetic(AdjacencyMatrix* matrix, int maxIterations, int populationSize, SelectionType selectionType, CrossingStrategy crossingStrategy, float mutationProbability, int verbose)
+Path TS_Genetic::TS_UseGenetic(AdjacencyMatrix* matrix, int maxIterations, int populationSize, SelectionType selectionType, CrossingStrategy crossingStrategy, float mutationProbability, int verbose)
 {
 	TS_Genetic instance = TS_Genetic(matrix, populationSize);
 	instance.generateRandomPopulation();
@@ -26,22 +26,29 @@ Path* TS_Genetic::TS_UseGenetic(AdjacencyMatrix* matrix, int maxIterations, int 
 			instance.makeSelection_rank();
 			break;
 		default:
-			std::cout << "Nie wybrano metody selekcji" << std::endl;
+			if (verbose) {
+				std::cout << "Nie wybrano metody selekcji" << std::endl;
+			}
 		}
 		// wyœwietl postêp
 		instance.sortPopulationByPathCost();
-		std::cout << "Pokolenie "
-			<< i << ". Wynik: ";
+		if (verbose) {
+			std::cout << "Pokolenie "
+				<< i << ". Wynik: ";
+		}
 		/*instance.population[0].CalculateCost() << "..." <<
 		instance.population[1].CalculateCost() << "..." <<
 		instance.population[2].CalculateCost() << std::endl;*/
-		for (int q = 0; q < populationSize; q++) {
-			std::cout << instance.population[q].CalculateCost() << "...";
+		if (verbose) {
+			for (int q = 0; q < populationSize; q++) {
+				std::cout << instance.population[q].CalculateCost() << "...";
+			}
+			std::cout << std::endl;
 		}
-		std::cout << std::endl;
+		
 	}
 
-	return &instance.population[0];
+	return instance.population[0];
 }
 
 void TS_Genetic::generateRandomPopulation()
