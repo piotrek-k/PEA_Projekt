@@ -45,6 +45,8 @@ Path TS_Ant_Colony::TS_UseAntColony(AdjacencyMatrix* matrix, int maxNumOfIterati
 
 		environment.EvaporatePheromone(evaporationRate);
 
+		int currentIterationBest = INT_MAX;
+
 		int prevAntValue = -1;
 		bool valuesAreTheSame = true;
 		for (int ant = 0; ant < numberOfAnts; ant++) {
@@ -54,6 +56,10 @@ Path TS_Ant_Colony::TS_UseAntColony(AdjacencyMatrix* matrix, int maxNumOfIterati
 				valuesAreTheSame = false;
 			}
 			prevAntValue = proposedBest;
+
+			if (currentIterationBest > proposedBest) {
+				currentIterationBest = proposedBest;
+			}
 
 			if (costOfBestPath > proposedBest) {
 				if (environment.ants[ant].Validate()) {
@@ -71,7 +77,7 @@ Path TS_Ant_Colony::TS_UseAntColony(AdjacencyMatrix* matrix, int maxNumOfIterati
 		environment.ants = vector<Path>();
 
 		if (verbose) {
-			std::cout << "Iter. " << i << ": " << costOfBestPath << std::endl;
+			std::cout << "Iter. " << i << ": global best: " << costOfBestPath << " current iter: " << currentIterationBest << std::endl;
 		}
 
 		if (valuesAreTheSame) {
