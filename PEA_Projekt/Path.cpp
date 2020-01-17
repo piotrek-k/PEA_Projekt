@@ -48,6 +48,21 @@ bool Path::ValueCanBeConnectedToEnd(int value)
 	return true;
 }
 
+bool Path::ValueCanBeAddedAndWontMakeACycle(int value)
+{
+	if (value == startingPoint) {
+		// adding this value connect point to beginning and makes cycle
+		return false;
+	}
+
+	for (int a = 0; a < path.size(); a++) {
+		if (path[a].to == value) {
+			return false;
+		}
+	}
+	return true;
+}
+
 void Path::SetStartingPoint(int pointIndex)
 {
 	if (path.size() > 0) {

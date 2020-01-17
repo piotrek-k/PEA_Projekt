@@ -22,15 +22,19 @@ public:
 	*/
 	static Path TS_UseAntColony(
 		AdjacencyMatrix* matrix,
+		int maxNumOfIterations,
 		int numberOfAnts,
 		float collectiveMemoryPower,
 		float greedyChoicePower,
 		float evaporationRate,
-		float pheromoneStartValue
+		float pheromoneStartValue,
+		bool verbose
 	);
 
-private:
 	vector<Path> ants = vector<Path>();
+
+private:
+	
 	AdjacencyMatrix* baseMatrix = new AdjacencyMatrix();
 	int graphSize = -1;
 	float** pheromoneValues; //[a][b] reprezentuje wartoœæ feromonu na drodze z a do b

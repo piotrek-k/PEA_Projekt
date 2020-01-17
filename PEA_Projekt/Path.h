@@ -29,6 +29,8 @@ public:
 	/// </summary>
 	bool ValueCanBeConnectedToEnd(int value);
 
+	bool ValueCanBeAddedAndWontMakeACycle(int value);
+
 	void SetStartingPoint(int pointIndex);
 	int GetStartingPoint();
 

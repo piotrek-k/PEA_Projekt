@@ -14,6 +14,7 @@
 #include "BulkDataTester.h"
 #include "TS_TabuSearch.h"
 #include "TS_Genetic.h"
+#include "../PEA_Projekt_StaticLib/TS_Ant_Colony.h"
 
 int main(int argc, char** argv)
 {
@@ -127,8 +128,39 @@ int main(int argc, char** argv)
 					targetPopulationSize,
 					TS_Genetic::SelectionType::rank,
 					TS_Genetic::CrossingStrategy::OX,
-					mutationProbability, 
-					crossesPerGeneration, 
+					mutationProbability,
+					crossesPerGeneration,
+					verbose);
+
+				std::cout << result.CalculateCost() << std::endl;
+			}
+		}
+	}
+	else if (argc > 1 && std::string(argv[1]) == "ANT") {
+		if (argc < 9) {
+			std::cout << "algortihm filename maxIter numOfAnts collectiveMemoryPower greedyChoicePower evaporationRate pheromoneStartValue verbose" << std::endl;
+		}
+		else {
+			std::string fileName = std::string(argv[2]);
+			int maxIter = atoi(argv[3]);
+			int numberOfAnts = atoi(argv[4]);
+			float collectiveMemoryPower = atof(argv[5]);
+			float greedyChoicePower = atof(argv[6]);
+			float evaporationRate = atof(argv[7]);
+			float pheromoneStartValue = atof(argv[8]);
+			int verbose = atoi(argv[9]);
+
+			lastAM = new AdjacencyMatrix(fileName);
+
+			if (lastAM != NULL) {
+				Path result = TS_Ant_Colony::TS_UseAntColony(
+					lastAM,
+					maxIter,
+					numberOfAnts,
+					collectiveMemoryPower,
+					greedyChoicePower,
+					evaporationRate,
+					pheromoneStartValue,
 					verbose);
 
 				std::cout << result.CalculateCost() << std::endl;
