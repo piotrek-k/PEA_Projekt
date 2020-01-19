@@ -16,7 +16,15 @@ Path::~Path()
 
 int Path::CalculateCost()
 {
-	return this->CalculateCost(this->path, this->baseMatrix);
+	if (costIsUpToDate && cachedCalculatedCost != -1) {
+		return cachedCalculatedCost;
+	}
+	else {
+		cachedCalculatedCost = this->CalculateCost(this->path, this->baseMatrix);
+		costIsUpToDate = true;
+
+		return cachedCalculatedCost;
+	}
 }
 
 int Path::CalculateCost(std::vector<PathEdge> path, AdjacencyMatrix* baseMatrix)
@@ -69,6 +77,8 @@ void Path::SetStartingPoint(int pointIndex)
 		throw "Cannot insert starting point to existing path";
 	}
 	startingPoint = pointIndex;
+
+	costIsUpToDate = false;
 }
 
 int Path::GetStartingPoint()
@@ -82,6 +92,8 @@ void Path::InsertEdge(PathEdge edge)
 		this->startingPoint = edge.from;
 	}
 	this->path.push_back(edge);
+
+	costIsUpToDate = false;
 }
 
 int Path::RemoveLastEdge()
@@ -93,6 +105,8 @@ int Path::RemoveLastEdge()
 	int lastNode = GetLastNode();
 
 	path.pop_back();
+
+	costIsUpToDate = false;
 
 	return lastNode;
 }
@@ -106,6 +120,8 @@ void Path::InsertNodeAtTheEnd(int value)
 
 	PathEdge e = PathEdge(this->GetLastNode(), value);
 	InsertEdge(e);
+
+	costIsUpToDate = false;
 }
 
 void Path::Reverse()
@@ -117,6 +133,8 @@ void Path::Reverse()
 	}
 
 	this->path = reversed;
+
+	costIsUpToDate = false;
 }
 
 int Path::GetNumberOfNodes()
@@ -149,6 +167,8 @@ void Path::ReplaceWithOtherInstance(const Path& otherInstance)
 	this->startingPoint = otherInstance.startingPoint;
 	this->path = otherInstance.path;
 	this->baseMatrix = otherInstance.baseMatrix;
+
+	costIsUpToDate = false;
 }
 
 void Path::SwapNodes(int positionInPath1, int positionInPath2)
@@ -182,6 +202,8 @@ void Path::SwapNodes(int positionInPath1, int positionInPath2)
 
 	ReplaceNode(positionInPath1, secondNodeIndex);
 	ReplaceNode(positionInPath2, firstNodeIndex);
+
+	costIsUpToDate = false;
 }
 
 void Path::ReplaceNode(int position, int value)
@@ -195,11 +217,15 @@ void Path::ReplaceNode(int position, int value)
 		path[position - 1].to = value;
 		path[position].from = value;
 	}
+
+	costIsUpToDate = false;
 }
 
 void Path::GenerateRandom()
 {
 	GenerateRandom(this->baseMatrix->GetSize());
+
+	costIsUpToDate = false;
 }
 
 void Path::GenerateRandom(int size)
@@ -286,6 +312,8 @@ void Path::GenerateGreedySolution(int greedyStartPoint)
 	}
 
 	path.push_back(PathEdge(prevNodeIndex, greedyStartPoint));
+
+	costIsUpToDate = false;
 }
 
 void Path::Display(std::ostream& stream)

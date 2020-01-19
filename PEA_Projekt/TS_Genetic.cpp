@@ -31,8 +31,8 @@ Path TS_Genetic::TS_UseGenetic(AdjacencyMatrix* matrix, int maxIterations, int p
 			}
 		}
 		// wyœwietl postêp
-		instance.sortPopulationByPathCost();
 		if (verbose) {
+			instance.sortPopulationByPathCost();
 			std::cout << "Pokolenie "
 				<< i << ". Wynik: ";
 		}
@@ -46,6 +46,7 @@ Path TS_Genetic::TS_UseGenetic(AdjacencyMatrix* matrix, int maxIterations, int p
 		
 	}
 
+	instance.sortPopulationByPathCost();
 	return instance.population[0];
 }
 
@@ -111,13 +112,13 @@ void TS_Genetic::randomlySwapMutatePopulation(float probability)
 		for (int genePos = 0; genePos < population[indiv].GetPathLength() - 1; genePos++) {
 			double x = ((double)rand() / (RAND_MAX));
 			if (probability >= x) {
-				Path p = Path(population[0].GetBaseMatrix());
-				p.ReplaceWithOtherInstance(population[indiv]);
+				//Path p = Path(population[0].GetBaseMatrix());
+				//p.ReplaceWithOtherInstance(population[indiv]);
 				population[indiv].SwapNodes(genePos, genePos + 1);
 				//std::cout << "Random swap" << std::endl;
-				if (population[indiv].Validate() == false) {
-					std::cout << "PROBLEM";
-				}
+				//if (population[indiv].Validate() == false) {
+				//	std::cout << "PROBLEM";
+				//}
 			}
 		}
 	}

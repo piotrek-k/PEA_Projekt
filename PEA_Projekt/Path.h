@@ -9,6 +9,8 @@ class Path
 private:
 	// potrzebne dla œcie¿ki jednoelementowej
 	int startingPoint = -1;
+	int cachedCalculatedCost = -1;
+	bool costIsUpToDate = false;
 
 	std::vector<PathEdge> path;
 	AdjacencyMatrix* baseMatrix;
