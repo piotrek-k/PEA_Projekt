@@ -13,13 +13,18 @@ TS_Genetic::TS_Genetic(AdjacencyMatrix* baseMatrix, int targetPopulationSize)
 Path TS_Genetic::TS_UseGenetic(AdjacencyMatrix* matrix, int maxIterations, int populationSize, SelectionType selectionType, CrossingStrategy crossingStrategy, float mutationProbability, int crossesPerGeneration, int verbose)
 {
 	TS_Genetic instance = TS_Genetic(matrix, populationSize);
+	Path* bestPath = new Path(matrix);
+	int costOfBestPath = INT_MAX;
+
 	instance.generateRandomPopulation();
 
 	for (int i = 0; i < maxIterations; i++) {
 		// wygeneruj losowe mutacje
-		instance.randomlySwapMutatePopulation(0.01);
+		instance.randomlySwapMutatePopulation(mutationProbability);
+
 		// utwórz nowe osobniki
 		instance.newGeneration_crossBestRandomly(populationSize, crossesPerGeneration, crossingStrategy);
+		
 		// wybierz osobniki do nastêpej iteracji
 		switch (selectionType) {
 		case SelectionType::rank:
@@ -30,6 +35,7 @@ Path TS_Genetic::TS_UseGenetic(AdjacencyMatrix* matrix, int maxIterations, int p
 				std::cout << "Nie wybrano metody selekcji" << std::endl;
 			}
 		}
+
 		// wyœwietl postêp
 		if (verbose) {
 			instance.sortPopulationByPathCost();
@@ -38,16 +44,24 @@ Path TS_Genetic::TS_UseGenetic(AdjacencyMatrix* matrix, int maxIterations, int p
 		}
 
 		if (verbose) {
-			for (int q = 0; q < populationSize; q++) {
+			for (int q = 0; q < min(10, populationSize); q++) {
 				std::cout << instance.population[q].CalculateCost() << "...";
 			}
 			std::cout << std::endl;
 		}
-		
+
+		int proposedBest = instance.population[0].CalculateCost();
+
+		if (proposedBest < costOfBestPath) {
+			costOfBestPath = proposedBest;
+			bestPath = new Path(matrix);
+			bestPath->ReplaceWithOtherInstance(instance.population[0]);
+		}
 	}
 
-	instance.sortPopulationByPathCost();
-	return instance.population[0];
+	//instance.sortPopulationByPathCost();
+	//return instance.population[0];
+	return *bestPath;
 }
 
 void TS_Genetic::generateRandomPopulation()
